@@ -1,0 +1,132 @@
+detective0_initialising:
+  game: initialising
+  name: detective0
+  type: Detective
+  origin_node_id: 13
+
+detective1_initialising:
+  game: initialising
+  name: detective1
+  type: Detective
+  origin_node_id: 26
+
+detective2_initialising:
+  game: initialising
+  name: detective2
+  type: Detective
+  origin_node_id: 29
+
+detective3_initialising:
+  game: initialising
+  name: detective3
+  type: Detective
+  origin_node_id: 34
+
+detective0_ready_to_start:
+  game: ready_to_start
+  name: detective0
+  type: Detective
+  origin_node_id: 13
+
+detective1_ready_to_start:
+  game: ready_to_start
+  name: detective1
+  type: Detective
+  origin_node_id: 26
+
+detective2_ready_to_start:
+  game: ready_to_start
+  name: detective2
+  type: Detective
+  origin_node_id: 29
+
+detective3_ready_to_start:
+  game: ready_to_start
+  name: detective3
+  type: Detective
+  origin_node_id: 34
+
+detective4_ready_to_start:
+  game: ready_to_start
+  name: detective4
+  type: Detective
+  origin_node_id: 50
+
+criminal0_ready_to_start:
+  game: ready_to_start
+  name: criminal0
+  type: Criminal
+  origin_node_id: 53
+
+detective0_criminal_lost:
+  game: criminal_lost
+  name: detective0
+  type: Detective
+  origin_node_id: 13
+
+detective1_criminal_lost:
+  game: criminal_lost
+  name: detective1
+  type: Detective
+  origin_node_id: 26
+
+detective2_criminal_lost:
+  game: criminal_lost
+  name: detective2
+  type: Detective
+  origin_node_id: 29
+
+detective3_criminal_lost:
+  game: criminal_lost
+  name: detective3
+  type: Detective
+  origin_node_id: 34
+
+detective4_criminal_lost:
+  game: criminal_lost
+  name: detective4
+  type: Detective
+  origin_node_id: 50
+
+criminal0_criminal_lost:
+  game: criminal_lost
+  name: criminal0
+  type: Criminal
+  origin_node_id: 53
+
+detective0_ongoing:
+  game: ongoing
+  name: detective0
+  type: Detective
+  origin_node_id: 13
+
+detective1_ongoing:
+  game: ongoing
+  name: detective1
+  type: Detective
+  origin_node_id: 26
+
+detective2_ongoing:
+  game: ongoing
+  name: detective2
+  type: Detective
+  origin_node_id: 29
+
+detective3_ongoing:
+  game: ongoing
+  name: detective3
+  type: Detective
+  origin_node_id: 34
+
+detective4_ongoing:
+  game: ongoing
+  name: detective4
+  type: Detective
+  origin_node_id: 50
+
+criminal0_ongoing:
+  game: ongoing
+  name: criminal0
+  type: Criminal
+  origin_node_id: 53
+

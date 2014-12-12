@@ -1,0 +1,95 @@
+window.Board = new function() {
+  this.id = 'board';
+
+  this.nodes = [];
+  this.routes = [];
+
+  this.node = function(id) {
+    return this.nodes.filter(function(node) {
+      return node.id == id;
+    })[0];
+  };
+
+  this.findRoutes = function(fromNodeId, toNodeId) {
+    return this.routes.filter(function(route) {
+      return route.from_node_id == fromNodeId && route.to_node_id == toNodeId;
+    });
+  };
+
+  this.load = function() {
+    var promise = Loaders.loadBoard();
+    promise.done(function(nodes, routes) {
+      Board.nodes = nodes[0];
+      Board.routes = routes[0];
+    });
+
+    return promise;
+  }
+
+  this.loaded = function() {
+    return this.nodes.length > 0 && this.routes.length > 0;
+  };
+};
+
+window.Game = new function() {
+  this.id = -1;
+
+  this.players = [];
+  this.currentRound = null;
+
+  this.finished = function() {
+    return this.players.filter(function(player) {
+      return player.players_turn;
+    }).length == 0;
+  };
+
+  // The player who's turn it is currently
+  this.currentPlayer = function() {
+    return this.players.filter(function(player) {
+      return player.players_turn;
+    })[0];
+  };
+
+  this.player = function(id) {
+    return this.players.filter(function(player) {
+      return player.id == id;
+    })[0];
+  };
+
+  this.load = function(gameId) {
+    this.id = gameId;
+
+    var promise = Loaders.loadGame(gameId);
+    promise.done(function(players, currentRound) {
+      Game.players = players[0];
+      Game.currentRound = currentRound[0];
+    });
+
+    return promise;
+  };
+
+  this.refresh = function() {
+    return this.load(this.id);
+  };
+
+  this.loaded = function() {
+    return this.id >= 0 && this.players.length > 0 && this.currentRound != null;
+  };
+};
+
+window.User = new function() {
+  this.id = -1;
+
+  this.player = function() {
+    return Game.player(this.id);
+  };
+
+  this.load = function(userId) {
+    this.id = userId;
+  };
+
+  this.loaded = function() {
+    return this.id >= 0;
+  };
+};
+

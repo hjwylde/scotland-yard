@@ -1,0 +1,36 @@
+move1_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: detective0_criminal_lost
+  to_node: 1
+  ticket: taxi
+
+move2_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: detective1_criminal_lost
+  to_node: 2
+  ticket: taxi
+
+move3_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: detective2_criminal_lost
+  to_node: 3
+  ticket: taxi
+
+move4_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: detective3_criminal_lost
+  to_node: 4
+  ticket: taxi
+
+move5_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: detective4_criminal_lost
+  to_node: 5
+  ticket: taxi
+
+move6_round1_criminal_lost:
+  round: round1_criminal_lost
+  player: criminal0_criminal_lost
+  to_node: 1
+  ticket: taxi
+

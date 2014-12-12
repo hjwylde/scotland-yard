@@ -1,0 +1,19 @@
+<header>
+  <h1>Games</h1>
+</header>
+
+<main data-template="index">
+  <ul>
+    <% @games.each do |game| %>
+      <li>
+        <%= link_to game.name, game %>
+        (<%= (Game::NUMBER_OF_PLAYERS - game.players.length) %> spots left)
+      </li>
+    <% end %>
+  </ul>
+
+  <p>
+    <%= link_to 'New Game', new_game_path %>
+  </p>
+</main>
+

@@ -1,0 +1,8 @@
+round1_criminal_lost:
+  game: criminal_lost
+  number: 1
+
+round1_ongoing:
+  game: ongoing
+  number: 1
+

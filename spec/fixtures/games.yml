@@ -1,0 +1,15 @@
+initialising:
+  name: initialising
+
+ready_to_start:
+  name: ready_to_start
+
+criminal_lost:
+  name: criminal_lost
+
+ongoing:
+  name: ongoing
+
+finished:
+  name: finished
+

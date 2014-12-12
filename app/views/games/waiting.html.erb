@@ -1,0 +1,13 @@
+<%= render 'header' %>
+
+<main data-template="waiting">
+  <h2>Players:</h2>
+  <ol>
+  <% @game.players.ordered.each do |player| %>
+    <li><%= "#{player.type} #{player.name}" %></li>
+  <% end %>
+  </ol>
+
+  <%= link_to 'Back', games_path %>
+</main>
+
