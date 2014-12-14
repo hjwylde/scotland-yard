@@ -11,7 +11,7 @@ class GamesController < UsersController
     if @game.finished?
       render :finished
     elsif @game.initialising?
-      if @user && @user.game == @game
+      if @user.try!(:game) == @game
         render :waiting
       else
         @player = Player.new
@@ -19,7 +19,7 @@ class GamesController < UsersController
         render :join
       end
     elsif @game.ongoing?
-      if @user && @user.game == @game
+      if @user.try!(:game) == @game
         render :ongoing
       else
         render status: :unauthorized

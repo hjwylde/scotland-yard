@@ -34,15 +34,11 @@ class Player < ActiveRecord::Base
   end
 
   def current_node
-    last_move = moves.includes(:to_node).ordered.last
-
-    last_move ? last_move.to_node : origin_node
+    moves.includes(:to_node).ordered.last.try!(:to_node) || origin_node
   end
 
   def current_node_id
-    last_move = moves.ordered.last
-
-    last_move ? last_move.to_node_id : origin_node_id
+    moves.ordered.last.try!(:to_node_id) || origin_node_id
   end
 
   def tickets_count
