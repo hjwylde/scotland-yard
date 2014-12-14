@@ -41,7 +41,7 @@ class Player < ActiveRecord::Base
     moves.ordered.last.try!(:to_node_id) || origin_node_id
   end
 
-  def tickets_count
+  def ticket_counts
     CountPlayerTicketsService.new(player: self).call
   end
 

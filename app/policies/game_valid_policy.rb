@@ -9,12 +9,12 @@ class GameValidPolicy
   # 2) the game only ever has at most Game::NUMBER_OF_PLAYERS and,
   # 3) if the game has Game::NUMBER_OF_PLAYERS, then the game has exactly 1 criminal
   def valid?
-    players_count_is_valid && player_types_are_valid
+    player_count_is_valid && player_types_are_valid
   end
 
   private
 
-  def players_count_is_valid
+  def player_count_is_valid
     @game.players.length <= Game::NUMBER_OF_PLAYERS
   end
 

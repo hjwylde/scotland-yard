@@ -1,7 +1,7 @@
 class RoundSerializer < ActiveModel::Serializer
-  attributes :id, :number, :moves_count
+  attributes :id, :number, :move_count
 
-  def moves_count
+  def move_count
     object.moves.count
   end
 end

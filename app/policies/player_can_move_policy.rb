@@ -8,16 +8,15 @@ class PlayerCanMovePolicy
   # This policy doesn't check whether a player 'may' move (i.e., is the game on-going? Has the round finished? Is it their
   # turn? etc.).
   def can_move?
-    # TODO: How should this be pluralised?
-    tickets_count = @player.tickets_count
+    ticket_counts = @player.ticket_counts
 
     # Performs an optimisation to prevent unnecessary SQL queries
     # Since all nodes support taxi and black tickets, the player may naturally move if they have any
-    return true if tickets_count.values_at(:taxi, :black).reduce(&:+) > 0
+    return true if ticket_counts.values_at(:taxi, :black).reduce(&:+) > 0
 
     policy = PlayerCanUseTicketPolicy.new(player: @player)
     (Move::TICKET_TYPES - [:double_move]).any? do |ticket|
-      policy.can_use?(ticket: ticket, count: tickets_count[ticket])
+      policy.can_use?(ticket: ticket, count: ticket_counts[ticket])
     end
   end
 end
