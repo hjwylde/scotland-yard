@@ -1,4 +1,4 @@
-<main data-template="ongoing" data-user-id="<%= @user.id %>" data-game-id="<%= @game.id %>">
+<main data-template="ongoing" data-user-id="<%= current_user.id %>" data-game-id="<%= @game.id %>">
   <%= render 'players' %>
 
   <%= render 'board' %>

@@ -3,17 +3,17 @@ module PlayersHelper
     ['player', player.type.downcase, ('turn' if player.id == @current_player.id)].compact
   end
 
-  def show_player_tickets_count(player:)
-    tickets_count = CountPlayerTicketsService.new(player: player).call
+  def show_player_ticket_counts(player:)
+    ticket_counts = CountPlayerTicketsService.new(player: player).call
 
     if player.detective?
-      [:black, :double_move].each { |ticket| tickets_count.delete(ticket) }
+      [:black, :double_move].each { |ticket| ticket_counts.delete(ticket) }
     end
 
     # TODO: Temporary deleting double move
-    tickets_count.delete(:double_move)
+    ticket_counts.delete(:double_move)
 
-    tickets_count.reduce('') do |html, (ticket, count)|
+    ticket_counts.reduce('') do |html, (ticket, count)|
       html + (content_tag :div, count, class: [:ticket, ticket])
     end.html_safe
   end

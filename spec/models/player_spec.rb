@@ -41,7 +41,7 @@ RSpec.describe Player, :type => :model do
     it 'fails'
   end
 
-  describe '#starting_tickets_count' do
+  describe '#starting_ticket_counts' do
     context 'for a detective' do
       it ''
     end
@@ -87,18 +87,18 @@ RSpec.describe Player, :type => :model do
     pending 'TODO'
   end
 
-  describe '#tickets_count' do
+  describe '#ticket_counts' do
     context 'initially' do
       pending 'TODO'
     end
 
     context 'in an on-going game' do
       context 'for a criminal' do
-        it 'returns the starting ticket count minus the used tickets plus the used detective tickets'
+        it "returns the starting ticket counts minus the used ticket counts plus the detectives' used ticket counts"
       end
 
       context 'for a detective' do
-        it 'returns the starting ticket count minus the used tickets'
+        it 'returns the starting ticket counts minus the used ticket counts'
       end
     end
   end

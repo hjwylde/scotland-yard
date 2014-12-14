@@ -1,10 +1,10 @@
-# Policy for determining if the game has finished
-# The game has finished if either the detectives or criminal have won
 class GameFinishedPolicy
   def initialize(game:)
     @game = game
   end
 
+  # Policy for determining if the game has finished
+  # The game has finished if either the detectives or criminal have won
   def finished?
     detectives_won? || criminal_won?
   end

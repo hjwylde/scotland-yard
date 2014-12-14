@@ -1,4 +1,4 @@
-class GamesController < UsersController
+class GamesController < UsersController::Base
   before_action :load_games, only: [:index]
   before_action :load_game, only: [:show]
   respond_to :html
@@ -11,21 +11,9 @@ class GamesController < UsersController
     if @game.finished?
       render :finished
     elsif @game.initialising?
-      if @user && @user.game == @game
-        render :waiting
-      else
-        @player = Player.new
-
-        render :join
-      end
+      render_game_initialising
     elsif @game.ongoing?
-      if @user && @user.game == @game
-        render :ongoing
-      else
-        render status: :unauthorized
-      end
-    else
-      render status: :internal_server_error
+      render_game_ongoing
     end
   end
 
@@ -51,6 +39,24 @@ class GamesController < UsersController
 
   def game_params
     params.require(:game).permit(:name)
+  end
+
+  def render_game_initialising
+    if current_user.try!(:game) == @game
+      render :waiting
+    else
+      @player = Player.new
+
+      render :join
+    end
+  end
+
+  def render_game_ongoing
+    if current_user.try!(:game) == @game
+      render :ongoing
+    else
+      render status: :unauthorized
+    end
   end
 end
 

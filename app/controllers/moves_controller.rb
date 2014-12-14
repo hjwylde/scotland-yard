@@ -1,4 +1,4 @@
-class MovesController < UsersController
+class MovesController < UsersController::Base
   before_action :load_player, only: [:create]
   before_action :load_game, only: [:create]
   before_action :validate_user, only: [:create]
@@ -40,7 +40,7 @@ class MovesController < UsersController
   end
 
   def validate_user
-    render nothing: true, status: :unauthorized if @user != @player
+    render nothing: true, status: :unauthorized if current_user != @player
   end
 
   def move_params

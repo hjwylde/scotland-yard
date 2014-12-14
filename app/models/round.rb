@@ -52,7 +52,7 @@ class Round < ActiveRecord::Base
   end
 
   def game_id_follows_previous_round
-    if previous && previous.game != game
+    if previous.try!(:game) != game
       errors.add :game_id, "does not match the previous round's game"
     end
   end
@@ -70,7 +70,7 @@ class Round < ActiveRecord::Base
   end
 
   def previous_round_finished
-    if previous && previous.ongoing?
+    if previous.try!(:ongoing?)
       errors.add :round, 'cannot be created until all players have moved in the previous round'
     end
   end

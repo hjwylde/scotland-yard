@@ -19,7 +19,7 @@ window.UiEvents = new function() {
       var routes = Board.findRoutes(Math.min(fromNodeId, toNodeId), Math.max(fromNodeId, toNodeId));
 
       routes = routes.filter(function(route) {
-        return User.player().tickets_count[route.transport_mode] > 0;
+        return User.player().ticket_counts[route.transport_mode] > 0;
       });
 
       var ticket = null;

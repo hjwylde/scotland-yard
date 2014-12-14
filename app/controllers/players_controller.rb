@@ -17,27 +17,18 @@ class PlayersController < ApplicationController
   end
 
   def create
-    @player = @game.players.new(player_params)
-
-    policy = GameValidPolicy.new(game: @game)
-
-    if !policy.valid?
-      redirect_to @game, alert: 'Player was unable to be created'
-    elsif !@player.save
-      redirect_to @game, alert: @player.errors.full_messages
-    else
-      if @game.players.count == Game::NUMBER_OF_PLAYERS
-        start_round = StartRoundService.new(game: @game)
-        start_round.on :fail do |errors|
-          render json: { errors: errors }, status: :internal_server_error
-          return
-        end
-
-        start_round.call
-      end
-
-      redirect_to @game
+    create_player = CreatePlayerService.new(game: @game)
+    create_player.on :fail do |errors|
+      render json: { errors: errors }, status: :internal_server_error
+      return
     end
+    create_player.on :success do |player|
+      @player = player
+    end
+
+    create_player.call(player_params)
+
+    redirect_to @game
   end
 
   private
@@ -55,7 +46,7 @@ class PlayersController < ApplicationController
   end
 
   def save_user
-    session[:user_id] = @player.id
+    session[:user_id] = @player.id if @player
   end
 
   def player_params

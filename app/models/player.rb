@@ -34,18 +34,14 @@ class Player < ActiveRecord::Base
   end
 
   def current_node
-    last_move = moves.includes(:to_node).ordered.last
-
-    last_move ? last_move.to_node : origin_node
+    moves.includes(:to_node).ordered.last.try!(:to_node) || origin_node
   end
 
   def current_node_id
-    last_move = moves.ordered.last
-
-    last_move ? last_move.to_node_id : origin_node_id
+    moves.ordered.last.try!(:to_node_id) || origin_node_id
   end
 
-  def tickets_count
+  def ticket_counts
     CountPlayerTicketsService.new(player: self).call
   end
 
@@ -66,7 +62,7 @@ class Player < ActiveRecord::Base
   end
 
   def origin_node_is_unused
-    if game && game.players.where.not(id: id).pluck(:origin_node_id).include?(origin_node_id)
+    if game && game.players.where.not(id: id).where(origin_node_id: origin_node_id).exists?
       errors.add :origin_node_id, 'is already used by another player'
     end
   end
