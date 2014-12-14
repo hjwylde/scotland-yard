@@ -1,12 +1,12 @@
-# Policy for determining if a round is finished
-# A round is finished if either:
-# 1) the game has finished or,
-# 2) every player that can move has moved
 class RoundFinishedPolicy
   def initialize(round:)
     @round = round
   end
 
+  # Policy for determining if a round is finished
+  # A round is finished if either:
+  # 1) the game has finished or,
+  # 2) every player that can move has moved
   def finished?
     @round.game.finished? || (unmoved_players & movable_players).none?
   end

@@ -1,13 +1,13 @@
-# Policy for determining if the detectives have lost
-# The detectives lose provided:
-# 1) the game has started,
-# 2) they haven't won and,
-# 3) none of them can move
 class DetectivesLostPolicy
   def initialize(game:)
     @game = game
   end
 
+  # Policy for determining if the detectives have lost
+  # The detectives lose provided:
+  # 1) the game has started,
+  # 2) they haven't won and,
+  # 3) none of them can move
   def lost?
     @game.started? && !detectives_won? && detectives_cannot_move?
   end

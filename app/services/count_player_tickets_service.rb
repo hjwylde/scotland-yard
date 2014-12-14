@@ -10,8 +10,8 @@ class CountPlayerTicketsService
       tickets_count
     else
       # A criminal also gets all of the detectives' used tickets
-      @player.game.detectives.reduce(tickets_count) do |tickets_count, detective|
-        tickets_count.merge(used_tickets_count(detective)) { |key, old, new| old + new }
+      @player.game.detectives.reduce(tickets_count) do |total, detective|
+        total.merge(used_tickets_count(detective)) { |key, old, new| old + new }
       end
     end
   end

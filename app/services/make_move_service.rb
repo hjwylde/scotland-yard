@@ -30,7 +30,7 @@ class MakeMoveService
   def route_exists
     node_ids = [@player.current_node.id, @to_node.id]
 
-    Route.where(from_node_id: node_ids.min, to_node_id: node_ids.max, transport_mode: @ticket).any?
+    Route.where(from_node_id: node_ids.min, to_node_id: node_ids.max, transport_mode: @ticket).exists?
   end
 end
 

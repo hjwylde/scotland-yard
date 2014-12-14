@@ -62,7 +62,7 @@ class Player < ActiveRecord::Base
   end
 
   def origin_node_is_unused
-    if game && game.players.where.not(id: id).pluck(:origin_node_id).include?(origin_node_id)
+    if game && game.players.where.not(id: id).where(origin_node_id: origin_node_id).exists?
       errors.add :origin_node_id, 'is already used by another player'
     end
   end
