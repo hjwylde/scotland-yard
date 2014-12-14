@@ -1,4 +1,4 @@
-class GamesController < UsersController
+class GamesController < UsersController::Base
   before_action :load_games, only: [:index]
   before_action :load_game, only: [:show]
   respond_to :html

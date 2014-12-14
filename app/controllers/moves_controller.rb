@@ -1,4 +1,4 @@
-class MovesController < UsersController
+class MovesController < UsersController::Base
   before_action :load_player, only: [:create]
   before_action :load_game, only: [:create]
   before_action :validate_user, only: [:create]
