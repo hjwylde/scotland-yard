@@ -80,25 +80,10 @@ window.Renderer = new function() {
   };
 
   var renderPlayers = function() {
-    // Clear all turn and adjacent classes
+    // Clear all turn classes
     svgPlayers().filter('.turn').each(function(node) {
       Svg.removeClass(d3.select(this), 'turn');
     });
-    svgNodes().filter('.adjacent').each(function(node) {
-      Svg.removeClass(d3.select(this), 'adjacent');
-    });
-
-    var userPlayer = User.player();
-    // If it's the user's turn, then highlight adjacent nodes
-    // TODO: Highlight the routes as well?
-    if (userPlayer.players_turn) {
-      var currentNode = Board.node(userPlayer.current_node_id);
-      svgNodes().each(function(node) {
-        if ($.inArray(node.id, currentNode.linked_node_ids) >= 0) {
-          Svg.addClass(d3.select(this), 'adjacent');
-        }
-      });
-    }
 
     var currentPlayer = Game.currentPlayer();
     if (currentPlayer) {
