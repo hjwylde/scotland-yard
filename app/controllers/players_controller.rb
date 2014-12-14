@@ -22,19 +22,11 @@ class PlayersController < ApplicationController
     policy = GameValidPolicy.new(game: @game)
 
     if !policy.valid?
-      redirect_to @game, alert: 'Player was unable to be created'
+      redirect_to @game, alert: ['Player was unable to be created']
     elsif !@player.save
       redirect_to @game, alert: @player.errors.full_messages
     else
-      if @game.players.count == Game::NUMBER_OF_PLAYERS
-        start_round = StartRoundService.new(game: @game)
-        start_round.on :fail do |errors|
-          render json: { errors: errors }, status: :internal_server_error
-          return
-        end
-
-        start_round.call
-      end
+      start_game if @game.players.count == Game::NUMBER_OF_PLAYERS
 
       redirect_to @game
     end
@@ -60,6 +52,16 @@ class PlayersController < ApplicationController
 
   def player_params
     params.require(:player).permit(:name, :type)
+  end
+
+  def start_game
+    start_round = StartRoundService.new(game: @game)
+    start_round.on :fail do |errors|
+      render json: { errors: errors }, status: :internal_server_error
+      return
+    end
+
+    start_round.call
   end
 end
 

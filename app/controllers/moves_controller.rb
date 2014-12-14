@@ -40,7 +40,7 @@ class MovesController < UsersController::Base
   end
 
   def validate_user
-    render nothing: true, status: :unauthorized if @user != @player
+    render nothing: true, status: :unauthorized if current_user != @player
   end
 
   def move_params

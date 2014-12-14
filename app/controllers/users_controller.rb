@@ -13,10 +13,11 @@ class UsersController
     end
 
     def load_user
-      # TODO: Use current_user
-      # TODO: Make current_user a private method that reads the current user - that way you can use
-      # helper methods such that it is accessable from the views
-      @user = (Player.find(session[:user_id]) if session[:user_id])
+      @current_user = (Player.find(session[:user_id]) if session[:user_id])
+    end
+
+    def current_user
+      @current_user
     end
   end
 end

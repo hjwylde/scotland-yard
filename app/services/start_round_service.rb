@@ -6,22 +6,29 @@ class StartRoundService
   end
 
   def call
-    publish(:fail, ['Game has finished']) and return if @game.finished?
-    publish(:fail, ['Current round has not finished']) and return if @game.current_round.try!(:ongoing?)
-
-    round = if @game.initialising?
-      @game.rounds.new(number: Round::STARTING_ROUND_NUMBER)
+    if @game.finished?
+      publish(:fail, ['Game has finished'])
+    elsif @game.current_round.try!(:ongoing?)
+      publish(:fail, ['Current round has not finished'])
     else
-      @game.rounds.new(number: @game.current_round.number + 1)
-    end
+      round = @game.rounds.new(number: next_round_number)
 
-    if round.save
-      publish :success, round
+      if round.save
+        publish :success, round
+      else
+        publish :fail, round.errors.full_messages
+      end
+    end
+  end
+
+  private
+
+  def next_round_number
+    if @game.initialising?
+      Round::STARTING_ROUND_NUMBER
     else
-      publish :fail, round.errors.full_messages
+      @game.current_round.number + 1
     end
-
-    nil
   end
 end
 
