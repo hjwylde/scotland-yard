@@ -26,9 +26,8 @@ class Node < ActiveRecord::Base
     (incoming_routes.pluck(:from_node_id) + outgoing_routes.pluck(:to_node_id)).uniq
   end
 
-  # TODO: Symbolize the result
   def transport_modes
-    (incoming_routes.pluck(:transport_mode) + outgoing_routes.pluck(:transport_mode)).uniq
+    (incoming_routes.pluck(:transport_mode) + outgoing_routes.pluck(:transport_mode)).uniq.map(&:to_sym)
   end
 
   private

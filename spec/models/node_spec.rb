@@ -97,7 +97,7 @@ RSpec.describe Node, :type => :model do
       let(:node) { Node.all[1] }
 
       it "returns the unique union of the routes' transport modes" do
-        expect(node.transport_modes).to match_array node.routes.map(&:transport_mode).uniq
+        expect(node.transport_modes).to match_array node.routes.map(&:transport_mode).uniq.map(&:to_sym)
       end
     end
   end
