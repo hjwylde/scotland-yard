@@ -7,8 +7,15 @@ $(function() {
 
 var init = function() {
   // Initialise the user
-  var userId = $('main').attr('data-user-id');
-  User.load(userId);
+  var promise = User.load();
+  promise.done(function(user) {
+    Renderer.render();
+  });
+  promise.fail(function(response) {
+    // TODO: promise.fail
+    console.error('fail');
+    console.error(response);
+  });
 
   // Initialise the board
   var promise = Board.load();

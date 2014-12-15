@@ -52,8 +52,8 @@ class Round < ActiveRecord::Base
   end
 
   def game_id_follows_previous_round
-    if previous.try!(:game) != game
-      errors.add :game_id, "does not match the previous round's game"
+    if previous && previous.game != game
+      errors.add :game_id, "is not the same as the previous round's game"
     end
   end
 

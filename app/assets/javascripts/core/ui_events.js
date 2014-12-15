@@ -37,7 +37,7 @@ window.UiEvents = new function() {
         return;
       }
 
-      var promise = Savers.savePlayerMove(User.id, { move: { to_node_id: toNodeId, ticket: ticket.toLowerCase() } })
+      var promise = Savers.savePlayerMove(Game.id, User.player().id, { move: { to_node_id: toNodeId, ticket: ticket.toLowerCase() } })
       promise.done(function() {
         Game.refresh().done(function() {
           if (Game.finished()) {

@@ -1,6 +1,6 @@
 window.Savers = new function() {
-  this.savePlayerMove = function(playerId, data) {
-    return $.post(Routes.player_moves_path(playerId, data));
+  this.savePlayerMove = function(gameId, playerId, data) {
+    return $.post(Routes.game_player_moves_path(gameId, playerId, data));
   };
 };
 

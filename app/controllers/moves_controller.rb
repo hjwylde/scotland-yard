@@ -1,7 +1,6 @@
-class MovesController < UsersController::Base
+class MovesController < GamesController::Base
   before_action :load_player, only: [:create]
-  before_action :load_game, only: [:create]
-  before_action :validate_user, only: [:create]
+  before_action :validate_player, only: [:create]
   respond_to :json
 
   def create
@@ -35,12 +34,9 @@ class MovesController < UsersController::Base
     @player = Player.find(params[:player_id])
   end
 
-  def load_game
-    @game = @player.game
-  end
-
-  def validate_user
-    render nothing: true, status: :unauthorized if current_user != @player
+  def validate_player
+    head :unauthorized if @player.game != @game
+    head :unauthorized if @player.user != @current_user
   end
 
   def move_params

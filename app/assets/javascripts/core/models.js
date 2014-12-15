@@ -1,3 +1,32 @@
+window.User = new function() {
+  this.id = -1;
+  this.name = null;
+  this.playerIds = [];
+  this.playerIndices = [];
+
+  this.player = function() {
+    return Game.players.filter(function(player) {
+      return $.inArray(player.id, User.playerIds) >= 0;
+    })[0];
+  };
+
+  this.load = function() {
+    var promise = Loaders.loadUser()
+    promise.done(function(user) {
+      User.id = user.id;
+      User.name = user.name;
+      User.playerIds = user.player_ids;
+      User.playerIndices = user.player_indices;
+    });
+
+    return promise;
+  };
+
+  this.loaded = function() {
+    return this.id >= 0;
+  };
+};
+
 window.Board = new function() {
   this.id = 'board';
 
@@ -74,22 +103,6 @@ window.Game = new function() {
 
   this.loaded = function() {
     return this.id >= 0 && this.players.length > 0 && this.currentRound != null;
-  };
-};
-
-window.User = new function() {
-  this.id = -1;
-
-  this.player = function() {
-    return Game.player(this.id);
-  };
-
-  this.load = function(userId) {
-    this.id = userId;
-  };
-
-  this.loaded = function() {
-    return this.id >= 0;
   };
 };
 
