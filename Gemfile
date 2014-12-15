@@ -15,7 +15,10 @@ gem 'actionpack-page_caching'
 # Database
 gem 'sqlite3'
 
-# CSS
+# HTML / CSS
+gem 'polymer-rails'
+gem 'polymer-core-rails'
+gem 'polymer-paper-rails'
 gem 'normalize-rails'
 gem 'sass-rails'
 
