@@ -34,7 +34,7 @@ RSpec.describe PlayerCanUseTicketPolicy do
 
       context "and the player's current node supports #{ticket} tickets" do
         before do
-          expect(player).to receive(:current_node).and_return instance_double('Node', transport_modes: [ticket.to_s])
+          expect(player).to receive(:current_node).and_return instance_double('Node', transport_modes: [ticket])
         end
 
         it 'returns true' do

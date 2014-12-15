@@ -1,5 +1,6 @@
 class Game < ActiveRecord::Base
-  NUMBER_OF_PLAYERS = 5
+  NAME = 'Scotland Yard'
+  NUMBER_OF_PLAYERS = 6
 
   has_many :players, inverse_of: :game, dependent: :destroy
   has_many :rounds, inverse_of: :game, dependent: :destroy

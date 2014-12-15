@@ -11,15 +11,15 @@ class PlayerCanUseTicketPolicy
   # This policy doesn't check whether a player 'may' use a ticket (i.e., is the game on-going? Has the round finished? Is it their
   # turn? etc.).
   def can_use?(ticket:, count:)
-    count > 0 && player_current_node_supports?(ticket: ticket)
+    count > 0 && player_current_node_supports?(ticket.to_sym)
   end
 
   private
 
-  def player_current_node_supports?(ticket: ticket)
+  def player_current_node_supports?(ticket)
     # Performs a simple optimisation to prevent unnecessary SQL queries
     # All nodes support taxi and black tickets
-    [:taxi, :black].include?(ticket) || @player.current_node.transport_modes.include?(ticket.to_s)
+    [:taxi, :black].include?(ticket) || @player.current_node.transport_modes.include?(ticket)
   end
 end
 
