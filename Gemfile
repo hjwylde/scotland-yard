@@ -12,7 +12,7 @@ gem 'sqlite3'
 
 # CSS
 gem 'normalize-rails'
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
 
 # Javascript
 gem 'd3-rails'

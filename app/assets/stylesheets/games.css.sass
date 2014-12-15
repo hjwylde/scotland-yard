@@ -1,0 +1,104 @@
+@import 'colours'
+
+main[data-template="ongoing"]
+  display: flex
+  width: 100%
+  height: 100%
+
+  section#players
+    width: 300px
+
+  div#board-container
+    height: 100%
+
+    flex: 1
+
+    background: image-url('games/london.png') center no-repeat
+    background-size: auto 100%
+
+svg#board
+  display: block
+  height: 100%
+  margin: auto
+
+  circle.node
+    fill: $taxi
+    stroke: white
+    stroke-width: 1px
+
+    &.taxi
+      fill: $taxi
+
+      &.highlighted, &.me, &:hover
+        fill: darken($taxi, 30%)
+
+    &.bus
+      fill: lighten($bus, 25%)
+
+      &.highlighted, &.me, &:hover
+        fill: $bus
+
+    &.underground
+      fill: lighten($underground, 25%)
+
+      &.highlighted, &.me, &:hover
+        fill: $underground
+
+    &.boat
+      fill: lighten($boat, 30%)
+
+      &.highlighted, &.me, &:hover
+        fill: $boat
+
+  text.node
+    pointer-events: none
+    -webkit-user-select: none
+    user-select: none
+
+    font-size: 12px
+    font-weight: bold
+
+  line.link
+    stroke: black
+    stroke-width: 1px
+    stroke-opacity: 0.6
+
+    &.bus
+      stroke: $bus
+      stroke-width: 2px
+
+    &.underground, &.boat
+      stroke-width: 4px
+      stroke-dasharray: 5 2
+    &.underground
+      stroke: $underground
+    &.boat
+      stroke: $boat
+
+  circle.player
+    pointer-events: none
+
+    fill: transparent
+    stroke-width: 2px
+
+    &.detective
+      fill: $detective
+      stroke: $detective
+
+      &.highlighted
+        stroke: $red
+    &.criminal
+      fill: $criminal
+      stroke: $criminal
+    &.criminal:not(.me)
+      fill: transparent
+      stroke: transparent
+    &.me
+      stroke: black
+    &.turn.me
+      fill: $turn
+      stroke: black
+
+      &.highlighted
+        stroke: $red
+
