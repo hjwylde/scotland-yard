@@ -1,5 +1,6 @@
 class Player < ActiveRecord::Base
   belongs_to :game, inverse_of: :players
+  belongs_to :user, inverse_of: :players
   belongs_to :origin_node, class_name: 'Node', inverse_of: :players
   has_many :moves, inverse_of: :player, dependent: :destroy
   has_many :rounds, through: :moves
@@ -8,14 +9,18 @@ class Player < ActiveRecord::Base
   scope :detectives, lambda { where(type: Detective) }
   scope :criminals, lambda { where(type: Criminal) }
 
-  before_validation :init_default_name, :init_random_origin_node
+  before_validation :init_random_origin_node
 
-  validates :game_id, :name, :type, :origin_node_id, presence: true
-  validates :name, uniqueness: { scope: :game_id }
+  validates :game_id, :user_id, :type, :origin_node_id, presence: true
+  validates :user_id, uniqueness: { scope: :game_id }
   validates :type, inclusion: { in: %w(Detective Criminal) }
 
   validate :origin_node_is_origin_node
   validate :origin_node_is_unused
+
+  def name
+    user.name
+  end
 
   def detective?
     type == Detective.name
@@ -46,10 +51,6 @@ class Player < ActiveRecord::Base
   end
 
   private
-
-  def init_default_name
-    self.name ||= "#{type} ##{1 + (detective? ? game.detectives.count : 0)}" if game
-  end
 
   def init_random_origin_node
     self.origin_node ||= (Node.origins - game.players.map(&:origin_node)).sample if game

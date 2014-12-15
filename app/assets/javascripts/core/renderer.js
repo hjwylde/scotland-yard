@@ -1,6 +1,6 @@
 window.Renderer = new function() {
   this.render = function() {
-    if (!Board.loaded() || !Game.loaded() || !User.loaded()) {
+    if (!User.loaded() || !Board.loaded() || !Game.loaded()) {
       return;
     }
 
@@ -65,7 +65,7 @@ window.Renderer = new function() {
     svgPlayers
       .data(Game.players)
       .enter().append('circle')
-      .attr('class', function(player) { return 'player ' + player.type.toLowerCase() + (player.players_turn ? ' turn' : '') + (player.id == User.id ? ' me' : ''); })
+      .attr('class', function(player) { return 'player ' + player.type.toLowerCase() + (player.players_turn ? ' turn' : '') + (player.id == User.player().id ? ' me' : ''); })
       .attr('r', 15)
       .attr('data-id', function(player) { return player.id; });
 

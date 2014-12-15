@@ -1,5 +1,5 @@
 class PlayerSerializer < ActiveModel::Serializer
-  attributes :id, :name, :type, :current_node_id, :players_turn, :ticket_counts
+  attributes :id, :type, :name, :current_node_id, :players_turn, :ticket_counts
 
   # TODO: Re-name to 'turn'
   # The standard query is extremely inefficient when trying to determine if it is the player's

@@ -1,11 +1,12 @@
-class PlayersController < ApplicationController
-  before_action :load_game, only: [:index, :create]
+class PlayersController < GamesController::Base
   before_action :load_players, only: [:index]
   before_action :load_current_player, only: [:index]
-  after_action :save_user, only: [:create]
   respond_to :html, :json
 
   caches_page :index
+
+  # Don't check that the user has a player in the current game if we're creating a player for them
+  skip_before_action :validate_game, only: :create
 
   def index
     if request.xhr? && request.format == 'html'
@@ -17,7 +18,7 @@ class PlayersController < ApplicationController
   end
 
   def create
-    create_player = CreatePlayerService.new(game: @game)
+    create_player = CreatePlayerService.new(game: @game, user: @current_user)
     create_player.on :fail do |errors|
       render json: { errors: errors }, status: :internal_server_error
       return
@@ -33,20 +34,12 @@ class PlayersController < ApplicationController
 
   private
 
-  def load_game
-    @game = Game.includes(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id])
-  end
-
   def load_players
     @players = @game.players.ordered
   end
 
   def load_current_player
     @current_player = GetCurrentPlayerService.new(game: @game).call
-  end
-
-  def save_user
-    session[:user_id] = @player.id if @player
   end
 
   def player_params

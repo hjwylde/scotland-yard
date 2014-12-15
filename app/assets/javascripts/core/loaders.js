@@ -1,8 +1,19 @@
 window.Loaders = new function() {
+  this.loadUser = function() {
+    var request = $.get(Routes.user_path());
+
+    request.then(function(user) {
+      user.player_indices = user.player_ids.map(idToIndex);
+
+      return user;
+    });
+
+    return request;
+  };
+
   this.loadBoard = function() {
     return $.when(this.loadNodes(), this.loadRoutes());
   };
-
 
   this.loadNodes = function() {
     var request = $.get(Routes.nodes_path());

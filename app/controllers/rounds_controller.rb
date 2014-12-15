@@ -1,5 +1,4 @@
-class RoundsController < ApplicationController
-  before_action :load_game, only: [:current]
+class RoundsController < GamesController::Base
   before_action :load_current_round, only: [:current]
   respond_to :json
 
@@ -10,10 +9,6 @@ class RoundsController < ApplicationController
   end
 
   private
-
-  def load_game
-    @game = Game.find(params[:game_id])
-  end
 
   def load_current_round
     @current_round = @game.current_round

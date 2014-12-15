@@ -1,6 +1,6 @@
-<%= form_for @game do |f| %>
+<%= form_for @user, url: login_user_path do |f| %>
   <%= f.label :name, 'Name: ' %>
   <%= f.text_field :name, required: true, autofocus: true %>
-  <%= f.submit %>
+  <%= f.submit 'Login' %>
 <% end %>
 

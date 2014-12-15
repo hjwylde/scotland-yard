@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127012634) do
+ActiveRecord::Schema.define(version: 20141214213338) do
 
   create_table "games", force: true do |t|
     t.string   "name",       null: false
@@ -45,14 +45,14 @@ ActiveRecord::Schema.define(version: 20141127012634) do
 
   create_table "players", force: true do |t|
     t.integer  "game_id",        null: false
-    t.string   "name",           null: false
+    t.integer  "user_id",        null: false
     t.string   "type",           null: false
     t.integer  "origin_node_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "players", ["game_id", "name"], name: "index_players_on_game_id_and_name", unique: true
+  add_index "players", ["game_id", "user_id"], name: "index_players_on_game_id_and_user_id", unique: true
   add_index "players", ["type"], name: "index_players_on_type"
 
   create_table "rounds", force: true do |t|
@@ -75,5 +75,13 @@ ActiveRecord::Schema.define(version: 20141127012634) do
   add_index "routes", ["from_node_id", "to_node_id", "transport_mode"], name: "index_routes_on_from_node_id_and_to_node_id_and_transport_mode", unique: true
   add_index "routes", ["from_node_id"], name: "index_routes_on_from_node_id"
   add_index "routes", ["to_node_id"], name: "index_routes_on_to_node_id"
+
+  create_table "users", force: true do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["name"], name: "index_users_on_name", unique: true
 
 end

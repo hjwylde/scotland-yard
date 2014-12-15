@@ -10,8 +10,6 @@
 
   <%= form_for [@game, @player.becomes(Player)] do |f| %>
     <% f.object = @player.becomes(@player.class) %>
-    <%= f.label :name, 'Name: ' %>
-    <%= f.text_field :name, required: true, autofocus: true %>
     <%= f.label :type, 'Type: ' %>
     <%= f.select :type, [Detective.name, Criminal.name] %>
     <%= f.submit 'Join' %>

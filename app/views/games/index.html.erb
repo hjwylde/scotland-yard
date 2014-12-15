@@ -7,7 +7,7 @@
     <% @games.each do |game| %>
       <li>
         <%= link_to game.name, game %>
-        (<%= (Game::NUMBER_OF_PLAYERS - game.players.length) %> spots left)
+        (<%= number_of_spots_available(game: game) %> available)
       </li>
     <% end %>
   </ul>
