@@ -11,7 +11,7 @@ class GamesController < SessionsController::Base
     end
 
     def load_current_user_player
-      @current_user_player = (@game.players & @current_user.player).first
+      @current_user_player = (@game.players & @current_user.players).first
     end
 
     def validate_game

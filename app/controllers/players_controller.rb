@@ -14,7 +14,7 @@ class PlayersController < GamesController::Base
       return
     end
 
-    render json: @players, each_serializer: PlayerSerializer, current_player: @current_player
+    render json: @players, current_player: @current_player
   end
 
   def create

@@ -6,7 +6,7 @@ class PlayerSerializer < ActiveModel::Serializer
   # turn
   # This optimises it by calculating the current player beforehand and passing it in
   def players_turn
-    if serialization_options.has_key?(:current_player)
+    if @options.has_key?(:current_player)
       current_player && object.id == current_player.id
     else
       Rails.logger.warn('Unoptimised call to PlayerSerializer: it should include a :current_player argument')
@@ -18,7 +18,7 @@ class PlayerSerializer < ActiveModel::Serializer
   private
 
   def current_player
-    serialization_options[:current_player]
+    @options[:current_player]
   end
 end
 
