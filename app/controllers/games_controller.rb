@@ -1,7 +1,5 @@
 class GamesController < SessionsController::Base
   class Base < SessionsController::Base
-    include UsersHelper
-
     before_action :load_game
     before_action :load_current_user_player
     before_action :validate_game
@@ -13,7 +11,7 @@ class GamesController < SessionsController::Base
     end
 
     def load_current_user_player
-      @current_user_player = player(game: @game, user: @current_user)
+      @current_user_player = (@game.players & @current_user.player).first
     end
 
     def validate_game
