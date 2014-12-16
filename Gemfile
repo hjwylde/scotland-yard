@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Core
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.8.0'
 gem 'rails', '4.1.8'
 gem 'rspec-rails'
 gem 'wisper'

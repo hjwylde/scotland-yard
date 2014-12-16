@@ -26,9 +26,7 @@ class Round < ActiveRecord::Base
     criminal_node_id = moves.of_criminals.first.to_node_id
 
     detectives_node_ids = moves.of_detectives.pluck(:to_node_id)
-    if previous
-      detectives_node_ids += previous.moves.of_detectives.pluck(:to_node_id)
-    end
+    detectives_node_ids += previous.moves.of_detectives.pluck(:to_node_id) if previous
 
     detectives_node_ids.include?(criminal_node_id)
   end
