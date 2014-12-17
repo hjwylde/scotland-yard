@@ -110,11 +110,42 @@ window.Game = new function() {
   };
 
   this.refresh = function() {
-    return this.load(this.id);
+    var promise = this.load(this.id);
+
+    promise.done(function() {
+      // TODO: Don't hardcore the title
+      if (Game.currentPlayer().id == User.player().id) {
+        if (!("Notification" in window)) {
+          alert("It's your turn!");
+        } else if (Notification.permission == 'granted') {
+          new Notification("Scotland Yard", {"body": "It's your turn!" });
+        } else if (Notification.permission != 'denied') {
+          Notification.requestPermission(function(permission) {
+            if (permission == 'granted') {
+              new Notification("Scotland Yard", {"body": "It's your turn!" });
+            }
+          });
+        }
+      }
+    });
+
+    return promise;
   };
 
   this.loaded = function() {
     return this.id >= 0 && this.players.length > 0 && this.currentRound != null;
+  };
+
+  // PRIVATE
+
+  var notifyTurn = function() {
+    new Notification('Scotland Yard', {
+      body: "It's your turn!",
+      // TODO: Get this working
+      onClick: function(data) {
+        tabs.open(data);
+      }
+    });
   };
 };
 
