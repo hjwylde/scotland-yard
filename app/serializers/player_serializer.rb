@@ -11,7 +11,7 @@ class PlayerSerializer < ActiveModel::Serializer
     else
       Rails.logger.warn('Unoptimised call to PlayerSerializer: it should include a :current_player argument')
 
-      object.game.started? && PlayerTurnPolicy.new(round: object.game.current_round).turn_of?(object)
+      object.game.ongoing? && PlayerTurnPolicy.new(round: object.game.current_round).turn_of?(object)
     end
   end
 

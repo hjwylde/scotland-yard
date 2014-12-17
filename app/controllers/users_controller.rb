@@ -14,7 +14,9 @@ class UsersController < SessionsController::Base
     @user = User.new(user_params)
 
     if @user.save
-      redirect_to login_user_path
+      save_session
+
+      redirect_to root_path
     else
       redirect_to new_user_path, alert: @user.errors.full_messages
     end
@@ -24,6 +26,10 @@ class UsersController < SessionsController::Base
 
   def user_params
     params.require(:user).permit(:name)
+  end
+
+  def save_session
+    session[:current_user_id] = @user.id
   end
 end
 

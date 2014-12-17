@@ -12,10 +12,10 @@ class SessionsController < ApplicationController
 
     def validate_current_user
       if !User.find_by(id: session[:current_user_id])
-        reset_session
+        session.delete(:current_user_id)
 
         # Re-direct the user to login again
-        redirect_to login_user_path
+        redirect_to new_session_path
       end
     end
   end
@@ -32,7 +32,7 @@ class SessionsController < ApplicationController
     if @current_user
       redirect_to root_path
     else
-      redirect_to login_user_path, alert: ["Could not find a user with name '#{user_params['name']}'"]
+      redirect_to new_session_path, alert: ["Could not find a user with name '#{user_params['name']}'"]
     end
   end
 

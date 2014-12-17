@@ -6,8 +6,10 @@ class Round < ActiveRecord::Base
   has_many :players, through: :moves
 
   scope :ordered, lambda { order(:game_id, :number) }
-  scope :finished, lambda { where('number < ?', pluck(:number).max) }
-  # Extra rounds are the criminal's double move ones (i.e., only a single move was made in them)
+  # For an on-going game, a round is finished if it is not the last one
+  # We don't care that the last one should be included for a finished game
+  scope :finished, lambda { where('number < ?', maximum(:number)) }
+  # Extra rounds are the criminal's double move ones (i.e., they only contain a single move)
   scope :extra, lambda { finished.joins(:moves).group('rounds.id').having('COUNT(*) == 1') }
 
   before_validation :init_default_number
