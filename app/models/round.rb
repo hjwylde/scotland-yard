@@ -6,6 +6,9 @@ class Round < ActiveRecord::Base
   has_many :players, through: :moves
 
   scope :ordered, lambda { order(:game_id, :number) }
+  scope :finished, lambda { where('number < ?', pluck(:number).max) }
+  # Extra rounds are the criminal's double move ones (i.e., only a single move was made in them)
+  scope :extra, lambda { finished.joins(:moves).group('rounds.id').having('COUNT(*) == 1') }
 
   before_validation :init_default_number
 
@@ -17,7 +20,6 @@ class Round < ActiveRecord::Base
   validate :game_id_follows_previous_round
   validate :number_starts_at_one
   validate :number_is_consecutive
-  validate :previous_round_finished
 
   def criminal_lost?
     # TODO: Make Round#criminal_lost? a policy
@@ -36,11 +38,16 @@ class Round < ActiveRecord::Base
   end
 
   def finished?
+    # TODO: Change this to next != nil
     RoundFinishedPolicy.new(round: self).finished?
   end
 
   def previous
-    game.rounds.detect { |round| round.number == number - 1 }
+    game.rounds.find_by(number: number - 1)
+  end
+
+  def next
+    game.rounds.find_by(number: number + 1)
   end
 
   private
@@ -64,12 +71,6 @@ class Round < ActiveRecord::Base
   def number_is_consecutive
     if previous && number != previous.number + 1
       errors.add :number, 'is not consecutive'
-    end
-  end
-
-  def previous_round_finished
-    if previous.try!(:ongoing?)
-      errors.add :round, 'cannot be created until all players have moved in the previous round'
     end
   end
 end

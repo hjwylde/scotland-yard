@@ -6,6 +6,7 @@ window.UiEvents = new function() {
     onMoveMouseLeave();
     onCurrentNodeMouseEnter();
     onCurrentNodeMouseLeave();
+    onDoubleMoveClick();
 
     onWindowResize();
   };
@@ -37,9 +38,11 @@ window.UiEvents = new function() {
         return;
       }
 
-      var promise = Savers.savePlayerMove(Game.id, User.player().id, { move: { to_node_id: toNodeId, ticket: ticket.toLowerCase() } })
+      var promise = Savers.savePlayerMove(Game.id, User.player().id, { move: { to_node_id: toNodeId, ticket: ticket.toLowerCase() }, double_move: User.doubleMove })
       promise.done(function() {
         Game.refresh().done(function() {
+          User.doubleMove = false;
+
           if (Game.finished()) {
             // Refresh the page to show the finish screen
             window.location.href = Routes.game_path(Game.id);
@@ -84,7 +87,7 @@ window.UiEvents = new function() {
   var onMoveMouseEnter = function() {
     // Highlight the node on the board when the user hovers over a player move
     $('#players').on('mouseenter', 'div.move:not(.hide)', function() {
-      id = $(this).text();
+      var id = $(this).text();
 
       svg().select('circle.node[data-id="' + id + '"]').each(function(node) {
         Svg.addClass(d3.select(this), 'highlighted');
@@ -94,7 +97,7 @@ window.UiEvents = new function() {
 
   var onMoveMouseLeave = function() {
     $('#players').on('mouseleave', 'div.move:not(.hide)', function() {
-      id = $(this).text();
+      var id = $(this).text();
 
       svg().select('circle.node[data-id="' + id + '"]').each(function(node) {
         Svg.removeClass(d3.select(this), 'highlighted');
@@ -105,7 +108,7 @@ window.UiEvents = new function() {
   var onCurrentNodeMouseEnter = function() {
     // Highlight the node on the board when the user hovers over a player current node
     $('#players').on('mouseenter', 'div.current-node', function() {
-      id = $(this).parent().closest('div.player').attr('data-id');
+      var id = $(this).parent().closest('div.player').attr('data-id');
 
       svg().select('circle.player[data-id="' + id + '"]').each(function(node) {
         Svg.addClass(d3.select(this), 'highlighted');
@@ -115,11 +118,19 @@ window.UiEvents = new function() {
 
   var onCurrentNodeMouseLeave = function() {
     $('#players').on('mouseleave', 'div.current-node', function() {
-      id = $(this).parent().closest('div.player').attr('data-id');
+      var id = $(this).parent().closest('div.player').attr('data-id');
 
       svg().select('circle.player[data-id="' + id + '"]').each(function(node) {
         Svg.removeClass(d3.select(this), 'highlighted');
       });
+    });
+  };
+
+  var onDoubleMoveClick = function() {
+    $('#players').on('click', '.criminal.me.turn .ticket.double-move', function() {
+      User.toggleDoubleMove();
+
+      $(this).toggleClass('active', User.doubleMove);
     });
   };
 

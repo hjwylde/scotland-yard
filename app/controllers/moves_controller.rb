@@ -7,16 +7,20 @@ class MovesController < GamesController::Base
     to_node = Node.find(move_params[:to_node_id])
     ticket = move_params[:ticket]
 
+    double_move = params[:double_move] == 'true'
+
     make_move = MakeMoveService.new(player: @player, to_node: to_node, ticket: ticket)
     make_move.on :success do
-      if @game.ongoing? && @game.current_round.finished?
+      # TODO: Move this to the make move service and have a check that the player actually has a
+      # double move ticket
+      if @game.ongoing? && (@game.current_round.finished? || double_move_valid(double_move))
         start_round = StartRoundService.new(game: @game)
         start_round.on :fail do |errors|
           render json: { errors: errors }, status: :internal_server_error
           return
         end
 
-        start_round.call
+        start_round.call(override_round_finished_policy: double_move)
       end
 
       render json: @move, status: :created
@@ -41,6 +45,11 @@ class MovesController < GamesController::Base
 
   def move_params
     params.require(:move).permit(:to_node_id, :ticket)
+  end
+
+  # TODO: Make this a policy?
+  def double_move_valid(double_move)
+    double_move && @player.criminal? && (@player.ticket_counts[:double_move] > 0)
   end
 end
 

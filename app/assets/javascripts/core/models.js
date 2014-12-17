@@ -3,11 +3,23 @@ window.User = new function() {
   this.name = null;
   this.playerIds = [];
   this.playerIndices = [];
+  this.doubleMove = false;
 
   this.player = function() {
     return Game.players.filter(function(player) {
       return $.inArray(player.id, User.playerIds) >= 0;
     })[0];
+  };
+
+  this.toggleDoubleMove = function() {
+    this.doubleMove = !this.doubleMove;
+
+    // Client-side validation that the player can use a double move ticket
+    if (this.player().ticket_counts['double-move'] <= 0 || this.player().type != 'Criminal') {
+      this.doubleMove = false;
+    }
+
+    return this.doubleMove;
   };
 
   this.load = function() {
