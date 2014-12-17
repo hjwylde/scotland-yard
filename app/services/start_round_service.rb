@@ -5,10 +5,10 @@ class StartRoundService
     @game = game
   end
 
-  def call
+  def call(override_round_finished_policy: false)
     if @game.finished?
       publish(:fail, ['Game has finished'])
-    elsif @game.current_round.try!(:ongoing?)
+    elsif @game.current_round.try!(:ongoing?) && !override_round_finished_policy
       publish(:fail, ['Current round has not finished'])
     else
       round = @game.rounds.new(number: next_round_number)

@@ -1,6 +1,6 @@
 module PlayersHelper
   def player_classes(player:)
-    ['player', player.type.downcase, ('turn' if player.id == @current_player.id)].compact
+    ['player', player.type.downcase, ('turn' if player.id == @current_player.id), ('me' if player.user == @current_user)].compact
   end
 
   def show_player_ticket_counts(player:)
@@ -10,11 +10,8 @@ module PlayersHelper
       [:black, :double_move].each { |ticket| ticket_counts.delete(ticket) }
     end
 
-    # TODO: Temporary deleting double move
-    ticket_counts.delete(:double_move)
-
     ticket_counts.reduce('') do |html, (ticket, count)|
-      html + (content_tag :div, count, class: [:ticket, ticket])
+      html + (content_tag :div, count, class: [:ticket, ticket.to_s.gsub(/_/, '-')])
     end.html_safe
   end
 

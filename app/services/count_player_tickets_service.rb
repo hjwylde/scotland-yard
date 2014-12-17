@@ -19,7 +19,11 @@ class CountPlayerTicketsService
   private
 
   def used_ticket_counts(player)
-    player.moves.group(:ticket).count.symbolize_keys
+    ticket_counts = player.moves.group(:ticket).count.symbolize_keys
+    # Double move tickets are counted by the rounds with only a single player in them
+    ticket_counts[:double_move] = (player.game.rounds.extra & player.rounds).length
+
+    ticket_counts
   end
 end
 

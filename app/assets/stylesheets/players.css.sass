@@ -55,13 +55,18 @@ section#players
       user-select: none
 
       &.taxi
-        background-color: $taxi
+        background: $taxi
       &.bus
-        background-color: $bus
+        background: $bus
       &.underground
-        background-color: $underground
+        background: $underground
       &.black
-        background-color: $boat
+        background: $boat
+      &.double-move
+        background: $double-move
+
+        &.active
+          background: $yellow
 
     div.tickets
       display: flex
