@@ -15,5 +15,7 @@
 //= require jquery_ujs
 //= require d3
 //= require js-routes
-//= require_tree .
+
+//= require_tree ./base/
+//= require_tree ./
 

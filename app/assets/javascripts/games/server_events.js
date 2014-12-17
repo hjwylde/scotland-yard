@@ -1,5 +1,8 @@
-window.ServerEvents = new function() {
-  this.hook = function(force) {
+(function(hook) {
+  ServerEvents.hook = function(force) {
+    // Call the parent hook first
+    hook();
+
     poll(force, 1000);
   };
 
@@ -11,9 +14,10 @@ window.ServerEvents = new function() {
       if (JSON.stringify(currentRound) !== JSON.stringify(Game.currentRound)) {
         Game.refresh().done(function() {
           if (Game.finished()) {
-            window.location.href = Routes.game_path(Game.id)
+            location.href = Routes.game_path(Game.id)
           } else {
             Renderer.render();
+            // TODO: Renderer.render should call force.start()
             force.start();
           }
         });
@@ -25,5 +29,5 @@ window.ServerEvents = new function() {
       }, timeout)
     });
   };
-};
+})(ServerEvents.hook);
 

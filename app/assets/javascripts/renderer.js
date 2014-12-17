@@ -32,10 +32,10 @@ window.Renderer = new function() {
   var firstRender = true;
 
   var renderSvg = function(options) {
-    if (typeof options === 'undefined') options = {};
+    if (options === void(0)) options = {};
 
-    if (typeof options.width === 'undefined') options.width = 1400;
-    if (typeof options.height === 'undefined') options.height = 1400;
+    if (options.width === void(0)) options.width = 1400;
+    if (options.height === void(0)) options.height = 1400;
 
     var svg = d3.select('#' + Board.id)
       .attr('viewBox', '0 0 ' + options.width + ' ' + options.height)
@@ -65,7 +65,7 @@ window.Renderer = new function() {
     svgPlayers
       .data(Game.players)
       .enter().append('circle')
-      .attr('class', function(player) { return 'player ' + player.type.toLowerCase() + (player.players_turn ? ' turn' : '') + (player.id == User.player().id ? ' me' : ''); })
+      .attr('class', function(player) { return 'player ' + player.type.toLowerCase() + (Game.activePlayer && player.id === Game.activePlayer.id ? ' turn' : '') + (player.id === User.player().id ? ' me' : ''); })
       .attr('r', 15)
       .attr('data-id', function(player) { return player.id; });
 
@@ -82,14 +82,14 @@ window.Renderer = new function() {
   var renderPlayers = function() {
     // Clear all turn classes
     svgPlayers().filter('.turn').each(function(node) {
-      Svg.removeClass(d3.select(this), 'turn');
+      Helpers.removeClass(d3.select(this), 'turn');
     });
 
     var currentPlayer = Game.currentPlayer();
     if (currentPlayer) {
       svgPlayers().each(function(player) {
-        if (player.id == currentPlayer.id) {
-          Svg.addClass(d3.select(this), 'turn');
+        if (player.id === currentPlayer.id) {
+          Helpers.addClass(d3.select(this), 'turn');
         }
       });
     }

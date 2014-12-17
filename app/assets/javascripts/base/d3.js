@@ -1,21 +1,21 @@
+// TODO: Remove this
 window.D3 = new function() {
   this.createForce = function(options) {
-    if (typeof options === 'undefined') options = {};
+    if (options === void(0)) options = {};
 
-    if (typeof options.width === 'undefined') options.width = 1400;
-    if (typeof options.height === 'undefined') options.height = 1400;
-    if (typeof options.gutter === 'undefined') options.gutter = 0;
+    if (options.width === void(0)) options.width = 1400;
+    if (options.height === void(0)) options.height = 1400;
+    if (options.gutter === void(0)) options.gutter = 0;
 
-    if (typeof options.charge === 'undefined') options.charge = -250;
-    if (typeof options.gravity === 'undefined') options.gravity = 0.02;
-    if (typeof options.friction === 'undefined') options.friction = 0.9;
+    if (options.charge === void(0)) options.charge = -250;
+    if (options.gravity === void(0)) options.gravity = 0.02;
+    if (options.friction === void(0)) options.friction = 0.9;
 
-    if (typeof options.linkDistance === 'undefined') options.linkDistance = forceLinkDistance;
-    if (typeof options.linkStrength === 'undefined') options.linkStrength = forceLinkStrength;
+    if (options.linkDistance === void(0)) options.linkDistance = forceLinkDistance;
+    if (options.linkStrength === void(0)) options.linkStrength = forceLinkStrength;
 
-
-    if (typeof options.animationStep === 'undefined') options.animationStep = 40;
-    if (typeof options.tick === 'undefined') options.tick = forceTick(options);
+    if (options.animationStep === void(0)) options.animationStep = 40;
+    if (options.tick === void(0)) options.tick = forceTick(options);
 
     var force = d3.layout.force()
       .nodes(Board.nodes)
