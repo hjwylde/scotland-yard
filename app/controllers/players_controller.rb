@@ -14,6 +14,9 @@ class PlayersController < GamesController::Base
       return
     end
 
+    # Don't reveal the criminal to the detectives in the API
+    @players.to_a.delete_if(&:criminal?) unless @game.criminals.first.user == @current_user
+
     render json: @players, current_player: @current_player
   end
 
