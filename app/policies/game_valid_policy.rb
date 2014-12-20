@@ -1,6 +1,10 @@
 class GameValidPolicy
+  include Wisper::Publisher
+
   def initialize(game:)
     @game = game
+
+    @errors = []
   end
 
   # Policy for determining if the game is valid
@@ -9,13 +13,26 @@ class GameValidPolicy
   # 2) the game only ever has at most Game::NUMBER_OF_PLAYERS and,
   # 3) if the game has Game::NUMBER_OF_PLAYERS, then the game has exactly 1 criminal
   def valid?
-    player_count_is_valid && player_types_are_valid
+    check_player_count_is_valid
+    check_player_types_are_valid
+
+    publish(:fail, @errors) if @errors.any?
+
+    @errors.empty?
   end
 
   private
 
-  def player_count_is_valid
-    @game.players.length <= Game::NUMBER_OF_PLAYERS
+  def check_player_count_is_valid
+    if @game.players.length > Game::NUMBER_OF_PLAYERS
+      @errors << "Game needs #{Game::NUMBER_OF_PLAYERS} players to start"
+    end
+  end
+
+  def check_player_types_are_valid
+    unless player_types_are_valid
+      @errors << 'Game needs exactly 1 criminal'
+    end
   end
 
   def player_types_are_valid

@@ -2,8 +2,8 @@ class Round < ActiveRecord::Base
   STARTING_ROUND_NUMBER = 1
 
   belongs_to :game, inverse_of: :rounds
-  has_many :moves, inverse_of: :round, dependent: :destroy
-  has_many :players, through: :moves
+  has_many :moves, lambda { ordered }, inverse_of: :round, dependent: :destroy
+  has_many :players, lambda { includes(:rounds).ordered }, through: :moves
 
   scope :ordered, lambda { order(:game_id, :number) }
   # For an on-going game, a round is finished if it is not the last one
@@ -23,25 +23,12 @@ class Round < ActiveRecord::Base
   validate :number_starts_at_one
   validate :number_is_consecutive
 
-  def criminal_lost?
-    # TODO: Make Round#criminal_lost? a policy
-    return false if moves.of_criminals.empty?
-
-    criminal_node_id = moves.of_criminals.first.to_node_id
-
-    detectives_node_ids = moves.of_detectives.pluck(:to_node_id)
-    detectives_node_ids += previous.moves.of_detectives.pluck(:to_node_id) if previous
-
-    detectives_node_ids.include?(criminal_node_id)
-  end
-
   def ongoing?
     !finished?
   end
 
   def finished?
-    # TODO: Change this to next != nil
-    RoundFinishedPolicy.new(round: self).finished?
+    self.next.try!(:exists?)
   end
 
   def previous

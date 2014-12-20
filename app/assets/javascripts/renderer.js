@@ -85,10 +85,9 @@ window.Renderer = new function() {
       Helpers.removeClass(d3.select(this), 'turn');
     });
 
-    var currentPlayer = Game.currentPlayer();
-    if (currentPlayer) {
+    if (Game.activePlayer) {
       svgPlayers().each(function(player) {
-        if (player.id === currentPlayer.id) {
+        if (player.id === Game.activePlayer.id) {
           Helpers.addClass(d3.select(this), 'turn');
         }
       });

@@ -1,5 +1,5 @@
 class RoutesController < ApplicationController
-  before_action :load_routes, only: [:index]
+  before_action :load_routes, only: :index
   respond_to :json
 
   caches_page :index

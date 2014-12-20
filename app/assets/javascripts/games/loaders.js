@@ -4,11 +4,11 @@ window.Loaders = (function(module) {
   };
 
   module.loadGame = function(gameId) {
-    return $.when(this.loadPlayers(gameId), this.loadCurrentRound(gameId));
+    return $.when(this.loadPlayers(gameId), this.loadActivePlayer(gameId), this.loadCurrentRound(gameId));
   };
 
   module.loadCurrentRound = function(gameId) {
-    return $.get(Routes.game_rounds_current_path(gameId));
+    return $.get(Routes.game_rounds_current_path(gameId), null, null, 'json');
   };
 
   return module;

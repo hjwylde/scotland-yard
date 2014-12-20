@@ -1,6 +1,6 @@
 window.Loaders = (function(module) {
   module.loadPlayers = function(gameId) {
-    var request = $.get(Routes.game_players_path(gameId));
+    var request = $.get(Routes.game_players_path(gameId), null, null, 'json');
 
     request.then(function(players) {
       for (var i = 0; i < players.length; i++) {
@@ -12,6 +12,10 @@ window.Loaders = (function(module) {
     });
 
     return request;
+  };
+
+  module.loadActivePlayer = function(gameId) {
+    return $.get(Routes.game_players_active_path(gameId), null, null, 'json');
   };
 
   module.loadPlayersPanel = function(panelId, gameId) {

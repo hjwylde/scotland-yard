@@ -5,7 +5,7 @@ class Move < ActiveRecord::Base
   belongs_to :player, inverse_of: :moves
   belongs_to :to_node, class_name: 'Node', inverse_of: :moves
 
-  scope :ordered, lambda { joins(:round).order('rounds.game_id', 'rounds.number', :player_id) }
+  scope :ordered, lambda { includes(:round).order('rounds.game_id', 'rounds.number', :player_id) }
   scope :of_detectives, lambda { joins(:player).where('players.type' => Detective) }
   scope :of_criminals, lambda { joins(:player).where('players.type' => Criminal) }
 

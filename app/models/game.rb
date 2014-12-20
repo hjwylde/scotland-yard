@@ -2,8 +2,8 @@ class Game < ActiveRecord::Base
   NAME = 'Scotland Yard'
   NUMBER_OF_PLAYERS = 6
 
-  has_many :players, inverse_of: :game, dependent: :destroy
-  has_many :rounds, inverse_of: :game, dependent: :destroy
+  has_many :players, lambda { ordered }, inverse_of: :game, dependent: :destroy
+  has_many :rounds, lambda { ordered }, inverse_of: :game, dependent: :destroy
 
   before_validation :init_default_name
 
@@ -20,7 +20,7 @@ class Game < ActiveRecord::Base
   end
 
   def current_round
-    rounds.ordered.last
+    rounds.last
   end
 
   def initialising?

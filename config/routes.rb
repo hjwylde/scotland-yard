@@ -6,11 +6,12 @@ Rails.application.routes.draw do
 
   resources :games, only: [:index, :show, :new, :create] do
     resources :rounds, only: [:create]
-    get '/rounds/current', to: 'rounds#current', as: 'rounds_current'
+    get '/rounds/current', to: 'rounds#current'
 
     resources :players, only: [:index, :create] do
       resources :moves, only: [:create]
     end
+    get '/players/active', to: 'players#active'
   end
 
   resources :nodes, only: [:index]

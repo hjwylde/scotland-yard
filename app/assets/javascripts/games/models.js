@@ -2,18 +2,14 @@ window.Game = new function() {
   this.id = -1;
 
   this.players = [];
+  this.activePlayer = null;
   this.currentRound = null;
 
-  this.finished = function() {
-    // TODO: Use a status flag to check
-    return false;
-  };
+  // TODO: Implement status flag
+  this.status = null;
 
-  // The player who's turn it is currently
-  this.currentPlayer = function() {
-    return this.players.filter(function(player) {
-      return player.players_turn;
-    })[0];
+  this.finished = function() {
+    return status === 'finished';
   };
 
   this.player = function(id) {
@@ -26,8 +22,9 @@ window.Game = new function() {
     this.id = gameId;
 
     var promise = Loaders.loadGame(gameId);
-    promise.done((function(players, currentRound) {
+    promise.done((function(players, activePlayer, currentRound) {
       this.players = players[0];
+      this.activePlayer = this.player(activePlayer[0].id);
       this.currentRound = currentRound[0];
     }).bind(this));
 
@@ -41,7 +38,7 @@ window.Game = new function() {
       if (this.activePlayer && this.activePlayer.id === User.player().id) {
         Helpers.createTurnNotification();
       }
-    });
+    }).bind(this));
 
     return promise;
   };

@@ -1,23 +1,30 @@
 class PlayersController < GamesController::Base
-  before_action :load_players, only: [:index]
-  before_action :load_current_player, only: [:index]
+  before_action :load_players, only: :index
+  before_action :load_active_player, only: :active
   respond_to :html, :json
-
-  caches_page :index
 
   # Don't check that the user has a player in the current game if we're creating a player for them
   skip_before_action :validate_game, only: :create
 
   def index
-    if request.xhr? && request.format == 'html'
-      render partial: 'players'
-      return
+    respond_to do |format|
+      format.html do
+        load_active_player
+
+        render partial: 'players'
+      end
+      format.json do
+        # TODO: Doesn't belong here
+        # Don't reveal the criminal to the detectives in the API
+        @players.to_a.delete_if(&:criminal?) unless @game.criminals.first.user_id == @current_user.id
+
+        render json: @players
+      end
     end
+  end
 
-    # Don't reveal the criminal to the detectives in the API
-    @players.to_a.delete_if(&:criminal?) unless @game.criminals.first.user == @current_user
-
-    render json: @players, current_player: @current_player
+  def active
+    render json: { id: @active_player.try!(:id) }
   end
 
   def create
@@ -38,11 +45,11 @@ class PlayersController < GamesController::Base
   private
 
   def load_players
-    @players = @game.players.ordered
+    @players = @game.players
   end
 
-  def load_current_player
-    @current_player = GetCurrentPlayerService.new(game: @game).call
+  def load_active_player
+    @active_player = GetActivePlayerService.new(game: @game).call
   end
 
   def player_params

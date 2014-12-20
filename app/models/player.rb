@@ -2,8 +2,8 @@ class Player < ActiveRecord::Base
   belongs_to :game, inverse_of: :players
   belongs_to :user, inverse_of: :players
   belongs_to :origin_node, class_name: 'Node', inverse_of: :players
-  has_many :moves, inverse_of: :player, dependent: :destroy
-  has_many :rounds, through: :moves
+  has_many :moves, lambda { includes(:round).ordered }, inverse_of: :player, dependent: :destroy
+  has_many :rounds, lambda { ordered }, through: :moves
 
   scope :ordered, lambda { order(:game_id, :type, :id) }
   scope :detectives, lambda { where(type: Detective) }
@@ -31,19 +31,19 @@ class Player < ActiveRecord::Base
   end
 
   def move_nodes
-    moves.includes(:to_node).ordered.map(&:to_node)
+    moves.preload(:to_node).map(&:to_node)
   end
 
   def move_node_ids
-    moves.ordered.pluck(:to_node_id)
+    moves.pluck(:to_node_id)
   end
 
   def current_node
-    moves.includes(:to_node).ordered.last.try!(:to_node) || origin_node
+    moves.preload(:to_node).last.try!(:to_node) || origin_node
   end
 
   def current_node_id
-    moves.ordered.last.try!(:to_node_id) || origin_node_id
+    moves.last.try!(:to_node_id) || origin_node_id
   end
 
   def ticket_counts

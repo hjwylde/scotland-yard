@@ -1,26 +1,26 @@
 class GamesController < SessionsController::Base
   class Base < SessionsController::Base
     before_action :load_game
-    before_action :load_current_user_player
+    before_action :load_current_player
     before_action :validate_game
 
     private
 
     def load_game
-      @game = Game.includes(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id])
+      @game = Game.preload(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id])
     end
 
-    def load_current_user_player
-      @current_user_player = (@game.players & @current_user.players).first
+    def load_current_player
+      @current_player = @game.players.where(user_id: @current_user.id)
     end
 
     def validate_game
-      head :unauthorized unless @current_user_player
+      head :unauthorized unless @current_player
     end
   end
 
-  before_action :load_games, only: [:index]
-  before_action :load_game, only: [:show]
+  before_action :load_games, only: :index
+  before_action :load_game, only: [:show, :status]
   respond_to :html
 
   def new
@@ -51,7 +51,9 @@ class GamesController < SessionsController::Base
 
   def load_games
     # Exclude games that are finished or on-going games that don't include the current user
-    @games = Game.includes(:players).reject do |game|
+    # TODO: Put this logic elsewhere, either a scope or query builder
+    # Games relating to user or initialising games
+    @games = Game.preload(:players, :rounds).reject do |game|
       game.finished? || (game.ongoing? && @current_user.games.exclude?(game))
     end
   end

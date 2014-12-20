@@ -321,6 +321,10 @@
   game_players_path: function(_game_id, options) {
   return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"players",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
+// game_players_active => /games/:game_id/players/active(.:format)
+  game_players_active_path: function(_game_id, options) {
+  return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"players",false]],[7,"/",false]],[6,"active",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  },
 // game_rounds => /games/:game_id/rounds(.:format)
   game_rounds_path: function(_game_id, options) {
   return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"rounds",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);

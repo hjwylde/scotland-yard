@@ -1,6 +1,6 @@
 module PlayersHelper
   def player_classes(player:)
-    ['player', player.type.downcase, ('turn' if player.id == @current_player.id), ('me' if player.user == @current_user)].compact
+    ['player', player.type.downcase, ('turn' if player == @active_player), ('me' if player == @current_player)].compact
   end
 
   def show_player_ticket_counts(player:)
@@ -23,7 +23,7 @@ module PlayersHelper
 
   def show_player_current_node(player:)
     if player.detective?
-      content_tag :div, player.current_node.id, class: [:'current-node']
+      content_tag :div, player.current_node_id, class: [:'current-node']
     else
       ''
     end

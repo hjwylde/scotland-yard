@@ -18,11 +18,9 @@ class RoundFinishedPolicy
   end
 
   def movable_players
-    @round.game.players.select { |player| player_can_move?(player) }
-  end
-
-  def player_can_move?(player)
-    PlayerCanMovePolicy.new(player: player).can_move?
+    @round.game.players.select do |player|
+      PlayerCanMovePolicy.new(player: player).can_move?
+    end
   end
 end
 

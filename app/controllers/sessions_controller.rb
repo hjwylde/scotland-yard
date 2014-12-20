@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
 
     def load_current_user
       # TODO: Get current_user working as a private method
-      @current_user = User.includes(:players).find_by(id: session[:current_user_id])
+      @current_user = User.find_by(id: session[:current_user_id])
     end
 
     def validate_current_user
@@ -20,9 +20,9 @@ class SessionsController < ApplicationController
     end
   end
 
-  before_action :load_current_user, only: [:create]
-  after_action :save_session, only: [:create]
-  after_action :destroy_session, only: [:destroy]
+  before_action :load_current_user, only: :create
+  after_action :save_session, only: :create
+  after_action :destroy_session, only: :destroy
 
   def new
     @user = User.new
@@ -51,7 +51,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy_session
-    reset_session
+    session.delete(:current_user_id)
   end
 
   def user_params

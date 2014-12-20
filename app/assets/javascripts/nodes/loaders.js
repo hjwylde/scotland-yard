@@ -1,6 +1,6 @@
 window.Loaders = (function(module) {
   module.loadNodes = function() {
-    var request = $.get(Routes.nodes_path());
+    var request = $.get(Routes.nodes_path(), null, null, 'json');
 
     request.then(function(nodes) {
       nodes.forEach(function(node) {
