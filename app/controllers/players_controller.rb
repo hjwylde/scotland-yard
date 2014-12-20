@@ -1,4 +1,4 @@
-class PlayersController < GamesController::Base
+class PlayersController < GamesControllerBase
   before_action :load_players, only: :index
   before_action :load_active_player, only: :active
   respond_to :html, :json
@@ -16,7 +16,7 @@ class PlayersController < GamesController::Base
       format.json do
         # TODO: Doesn't belong here
         # Don't reveal the criminal to the detectives in the API
-        @players.to_a.delete_if(&:criminal?) unless @game.criminals.first.user_id == @current_user.id
+        @players = @players.detectives unless @players.criminals.map(&:user_id).include?(@current_user.id)
 
         render json: @players
       end

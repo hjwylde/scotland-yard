@@ -1,4 +1,4 @@
-class RoundsController < GamesController::Base
+class RoundsController < GamesControllerBase
   before_action :load_current_round, only: :current
   respond_to :json
 

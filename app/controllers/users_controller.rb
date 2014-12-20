@@ -1,4 +1,4 @@
-class UsersController < SessionsController::Base
+class UsersController < SessionsControllerBase
   # Don't validate the current user if we're trying to create a new one
   skip_before_action :validate_current_user, only: [:new, :create]
 

@@ -1,4 +1,4 @@
-class MovesController < GamesController::Base
+class MovesController < GamesControllerBase
   before_action :load_player, only: :create
   before_action :validate_player, only: :create
   respond_to :json
