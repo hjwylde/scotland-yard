@@ -2,12 +2,14 @@ class Round < ActiveRecord::Base
   STARTING_ROUND_NUMBER = 1
 
   belongs_to :game, inverse_of: :rounds
-  has_many :moves, inverse_of: :round, dependent: :destroy
-  has_many :players, through: :moves
+  has_many :moves, lambda { ordered }, inverse_of: :round, dependent: :destroy
+  has_many :players, lambda { includes(:rounds).ordered }, through: :moves
 
   scope :ordered, lambda { order(:game_id, :number) }
-  scope :finished, lambda { where('number < ?', pluck(:number).max) }
-  # Extra rounds are the criminal's double move ones (i.e., only a single move was made in them)
+  # For an on-going game, a round is finished if it is not the last one
+  # We don't care that the last one should be included for a finished game
+  scope :finished, lambda { where('number < ?', maximum(:number)) }
+  # Extra rounds are the criminal's double move ones (i.e., they only contain a single move)
   scope :extra, lambda { finished.joins(:moves).group('rounds.id').having('COUNT(*) == 1') }
 
   before_validation :init_default_number
@@ -21,25 +23,12 @@ class Round < ActiveRecord::Base
   validate :number_starts_at_one
   validate :number_is_consecutive
 
-  def criminal_lost?
-    # TODO: Make Round#criminal_lost? a policy
-    return false if moves.of_criminals.empty?
-
-    criminal_node_id = moves.of_criminals.first.to_node_id
-
-    detectives_node_ids = moves.of_detectives.pluck(:to_node_id)
-    detectives_node_ids += previous.moves.of_detectives.pluck(:to_node_id) if previous
-
-    detectives_node_ids.include?(criminal_node_id)
-  end
-
   def ongoing?
     !finished?
   end
 
   def finished?
-    # TODO: Change this to next != nil
-    RoundFinishedPolicy.new(round: self).finished?
+    self.next.try!(:exists?)
   end
 
   def previous

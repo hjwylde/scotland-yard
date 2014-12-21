@@ -1,6 +1,10 @@
 class PlayerCanUseTicketPolicy
+  include Wisper::Publisher
+
   def initialize(player:)
     @player = player
+
+    @errors = []
   end
 
   # Policy for determining if a player can use a given ticket
@@ -11,10 +15,27 @@ class PlayerCanUseTicketPolicy
   # This policy doesn't check whether a player 'may' use a ticket (i.e., is the game on-going? Has the round finished? Is it their
   # turn? etc.).
   def can_use?(ticket:, count:)
-    count > 0 && player_current_node_supports?(ticket.to_sym)
+    check_ticket_count(ticket, count)
+    check_current_node_supports_ticket(ticket)
+
+    publish(:fail, @errors) if @errors.any?
+
+    @errors.empty?
   end
 
   private
+
+  def check_ticket_count(ticket, count)
+    if count <= 0
+      @errors << "You have no #{ticket} tickets"
+    end
+  end
+
+  def check_current_node_supports_ticket(ticket)
+    if !player_current_node_supports?(ticket)
+      @errors << "Your current node doesn't support #{ticket} tickets"
+    end
+  end
 
   def player_current_node_supports?(ticket)
     # Performs a simple optimisation to prevent unnecessary SQL queries

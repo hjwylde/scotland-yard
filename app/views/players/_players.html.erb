@@ -7,7 +7,7 @@
 
     <div class="tickets">
       <p>Tickets:</p>
-      <%= show_player_ticket_counts(player: player) %>
+      <%= show_player_ticket_counts(player: player, ticket_counts: @ticket_counts[player.id]) %>
     </div>
 
     <div class="moves">

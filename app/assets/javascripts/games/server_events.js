@@ -1,29 +1,31 @@
-window.ServerEvents = new function() {
-  this.hook = function(force) {
-    poll(force, 1000);
+(function(hook) {
+  ServerEvents.hook = function() {
+    // Call the parent hook first
+    hook();
+
+    poll(1000);
   };
 
   // PRIVATE
 
-  var poll = function(force, timeout) {
+  var poll = function(timeout) {
     var promise = Loaders.loadCurrentRound(Game.id);
     promise.done(function(currentRound) {
       if (JSON.stringify(currentRound) !== JSON.stringify(Game.currentRound)) {
         Game.refresh().done(function() {
           if (Game.finished()) {
-            window.location.href = Routes.game_path(Game.id)
+            location.href = Routes.game_path(Game.id)
           } else {
-            Renderer.render();
-            force.start();
+            Renderer.refresh();
           }
         });
       }
     });
     promise.always(function() {
       setTimeout(function() {
-        poll(force, timeout);
+        poll(timeout);
       }, timeout)
     });
   };
-};
+})(ServerEvents.hook);
 

@@ -1,8 +1,6 @@
-class RoundsController < GamesController::Base
-  before_action :load_current_round, only: [:current]
+class RoundsController < GamesControllerBase
+  before_action :load_current_round, only: :current
   respond_to :json
-
-  caches_page :current
 
   def current
     render json: @current_round

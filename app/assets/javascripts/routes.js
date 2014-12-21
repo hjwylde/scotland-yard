@@ -321,6 +321,10 @@
   game_players_path: function(_game_id, options) {
   return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"players",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
+// game_players_active => /games/:game_id/players/active(.:format)
+  game_players_active_path: function(_game_id, options) {
+  return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"players",false]],[7,"/",false]],[6,"active",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  },
 // game_rounds => /games/:game_id/rounds(.:format)
   game_rounds_path: function(_game_id, options) {
   return Utils.build_path(["game_id"], ["format"], [2,[2,[2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[3,"game_id",false]],[7,"/",false]],[6,"rounds",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
@@ -333,17 +337,13 @@
   games_path: function(options) {
   return Utils.build_path([], ["format"], [2,[2,[7,"/",false],[6,"games",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
-// login_user => /user/login(.:format)
-  login_user_path: function(options) {
-  return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"user",false]],[7,"/",false]],[6,"login",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
-  },
-// logout_user => /user/logout(.:format)
-  logout_user_path: function(options) {
-  return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"user",false]],[7,"/",false]],[6,"logout",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
-  },
 // new_game => /games/new(.:format)
   new_game_path: function(options) {
   return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"games",false]],[7,"/",false]],[6,"new",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  },
+// new_session => /session/new(.:format)
+  new_session_path: function(options) {
+  return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"session",false]],[7,"/",false]],[6,"new",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
 // new_user => /user/new(.:format)
   new_user_path: function(options) {
@@ -376,6 +376,10 @@
 // routes => /routes(.:format)
   routes_path: function(options) {
   return Utils.build_path([], ["format"], [2,[2,[7,"/",false],[6,"routes",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  },
+// session => /session(.:format)
+  session_path: function(options) {
+  return Utils.build_path([], ["format"], [2,[2,[7,"/",false],[6,"session",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
 // user => /user(.:format)
   user_path: function(options) {

@@ -1,16 +1,12 @@
 module PlayersHelper
   def player_classes(player:)
-    ['player', player.type.downcase, ('turn' if player.id == @current_player.id), ('me' if player.user == @current_user)].compact
+    ['player', player.type.downcase, ('turn' if player == @active_player), ('me' if player == @current_player)].compact
   end
 
-  def show_player_ticket_counts(player:)
-    ticket_counts = CountPlayerTicketsService.new(player: player).call
-
-    if player.detective?
-      [:black, :double_move].each { |ticket| ticket_counts.delete(ticket) }
-    end
-
-    ticket_counts.reduce('') do |html, (ticket, count)|
+  def show_player_ticket_counts(player:, ticket_counts:)
+    ticket_counts.select do |ticket, count|
+      player.criminal? || [:black, :double_move].exclude?(ticket)
+    end.reduce('') do |html, (ticket, count)|
       html + (content_tag :div, count, class: [:ticket, ticket.to_s.gsub(/_/, '-')])
     end.html_safe
   end
@@ -23,7 +19,7 @@ module PlayersHelper
 
   def show_player_current_node(player:)
     if player.detective?
-      content_tag :div, player.current_node.id, class: [:'current-node']
+      content_tag :div, player.current_node_id, class: [:'current-node']
     else
       ''
     end

@@ -1,6 +1,6 @@
-class MovesController < GamesController::Base
-  before_action :load_player, only: [:create]
-  before_action :validate_player, only: [:create]
+class MovesController < GamesControllerBase
+  before_action :load_player, only: :create
+  before_action :validate_player, only: :create
   respond_to :json
 
   def create
@@ -9,11 +9,14 @@ class MovesController < GamesController::Base
 
     double_move = params[:double_move] == 'true'
 
-    make_move = MakeMoveService.new(player: @player, to_node: to_node, ticket: ticket)
+    ticket_counts = CountPlayerTicketsService.new(game: @game).call
+
+    make_move = MakeMoveService.new(player: @player, to_node: to_node, ticket: ticket, cache: { ticket_counts: ticket_counts })
     make_move.on :success do
       # TODO: Move this to the make move service and have a check that the player actually has a
       # double move ticket
-      if @game.ongoing? && (@game.current_round.finished? || double_move_valid(double_move))
+      policy = RoundFinishedPolicy.new(round: @game.current_round)
+      if @game.ongoing? && (policy.finished? || double_move_valid(double_move, ticket_counts))
         start_round = StartRoundService.new(game: @game)
         start_round.on :fail do |errors|
           render json: { errors: errors }, status: :internal_server_error
@@ -48,8 +51,8 @@ class MovesController < GamesController::Base
   end
 
   # TODO: Make this a policy?
-  def double_move_valid(double_move)
-    double_move && @player.criminal? && (@player.ticket_counts[:double_move] > 0)
+  def double_move_valid(double_move, ticket_counts)
+    double_move && @player.criminal? && (ticket_counts[@player.id][:double_move] > 0)
   end
 end
 
