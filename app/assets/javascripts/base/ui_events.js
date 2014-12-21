@@ -1,4 +1,4 @@
 window.UiEvents = {
-  hook: function(force) {},
+  hook: function() {},
 };
 

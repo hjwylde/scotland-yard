@@ -1,7 +1,7 @@
 (function(hook) {
-  UiEvents.hook = function(force) {
+  UiEvents.hook = function() {
     // Call parent hook first
-    hook(force);
+    hook();
 
     onWindowResize();
   };

@@ -1,14 +1,14 @@
 (function(hook) {
-  ServerEvents.hook = function(force) {
+  ServerEvents.hook = function() {
     // Call the parent hook first
     hook();
 
-    poll(force, 1000);
+    poll(1000);
   };
 
   // PRIVATE
 
-  var poll = function(force, timeout) {
+  var poll = function(timeout) {
     var promise = Loaders.loadCurrentRound(Game.id);
     promise.done(function(currentRound) {
       if (JSON.stringify(currentRound) !== JSON.stringify(Game.currentRound)) {
@@ -16,16 +16,14 @@
           if (Game.finished()) {
             location.href = Routes.game_path(Game.id)
           } else {
-            Renderer.render();
-            // TODO: Renderer.render should call force.start()
-            force.start();
+            Renderer.refresh();
           }
         });
       }
     });
     promise.always(function() {
       setTimeout(function() {
-        poll(force, timeout);
+        poll(timeout);
       }, timeout)
     });
   };

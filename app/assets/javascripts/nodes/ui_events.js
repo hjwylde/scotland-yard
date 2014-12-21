@@ -1,15 +1,15 @@
 (function(hook) {
-  UiEvents.hook = function(force) {
+  UiEvents.hook = function() {
     // Call parent hook first
-    hook(force);
+    hook();
 
-    onNodeClick(force);
+    onNodeClick();
     onNodeHover();
   };
 
   // PRIVATE
 
-  var onNodeClick = function(force) {
+  var onNodeClick = function() {
     $('circle.node').click(function() {
       var fromNodeId = User.player().current_node_id;
       var toNodeId = $(this).attr('data-id');
@@ -44,8 +44,7 @@
             location.href = Routes.game_path(Game.id);
           } else {
             // Re-render the board players to show the made move
-            Renderer.render();
-            force.start();
+            Renderer.refresh();
           }
         });
       });
