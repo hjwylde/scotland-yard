@@ -1,0 +1,4 @@
+window.ServerEvents = {
+  hook: function() {},
+};
+

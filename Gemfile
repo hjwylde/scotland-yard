@@ -1,18 +1,23 @@
 source 'https://rubygems.org'
 
 # Core
-gem 'active_model_serializers'
 gem 'rails', '4.1.8'
 gem 'rspec-rails'
+gem 'unicorn'
+gem 'unicorn-rails'
+
+# Code
+gem 'active_model_serializers', '~> 0.8.0'
 gem 'wisper'
 gem 'wisper-rspec'
+gem 'actionpack-page_caching'
 
 # Database
 gem 'sqlite3'
 
 # CSS
 gem 'normalize-rails'
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
 
 # Javascript
 gem 'd3-rails'
@@ -20,12 +25,12 @@ gem 'js-routes'
 gem 'jquery-rails'
 gem 'uglifier', '>= 1.3.0' # JavaScript asset compressor
 
-# Debugging
-gem 'pry-byebug'
+group :development do
+  # Debugging
+  gem 'pry-byebug'
+  gem 'bullet'
 
-# Development
-gem 'spring', group: :development # Speeds up development by keeping your application running in the background
-
-# TODO: Temporary!
-gem 'actionpack-page_caching'
+  # Development
+  gem 'spring' # Speeds up development by keeping your application running in the background
+end
 

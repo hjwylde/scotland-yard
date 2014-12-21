@@ -4,6 +4,8 @@ class Route < ActiveRecord::Base
   belongs_to :from_node, class_name: 'Node', inverse_of: :outgoing_routes
   belongs_to :to_node, class_name: 'Node', inverse_of: :incoming_routes
 
+  scope :ordered, lambda { order(:from_node_id, :to_node_id) }
+
   validates :from_node_id, :to_node_id, :transport_mode, presence: true
   validates :transport_mode,
       inclusion: { in: TRANSPORT_MODES },

@@ -2,10 +2,15 @@ class Round < ActiveRecord::Base
   STARTING_ROUND_NUMBER = 1
 
   belongs_to :game, inverse_of: :rounds
-  has_many :moves, inverse_of: :round, dependent: :destroy
-  has_many :players, through: :moves
+  has_many :moves, lambda { ordered }, inverse_of: :round, dependent: :destroy
+  has_many :players, lambda { includes(:rounds).ordered }, through: :moves
 
   scope :ordered, lambda { order(:game_id, :number) }
+  # For an on-going game, a round is finished if it is not the last one
+  # We don't care that the last one should be included for a finished game
+  scope :finished, lambda { where('number < ?', maximum(:number)) }
+  # Extra rounds are the criminal's double move ones (i.e., they only contain a single move)
+  scope :extra, lambda { finished.joins(:moves).group('rounds.id').having('COUNT(*) == 1') }
 
   before_validation :init_default_number
 
@@ -17,32 +22,21 @@ class Round < ActiveRecord::Base
   validate :game_id_follows_previous_round
   validate :number_starts_at_one
   validate :number_is_consecutive
-  validate :previous_round_finished
-
-  def criminal_lost?
-    # TODO: Make Round#criminal_lost? a policy
-    return false if moves.of_criminals.empty?
-
-    criminal_node_id = moves.of_criminals.first.to_node_id
-
-    detectives_node_ids = moves.of_detectives.pluck(:to_node_id)
-    if previous
-      detectives_node_ids += previous.moves.of_detectives.pluck(:to_node_id)
-    end
-
-    detectives_node_ids.include?(criminal_node_id)
-  end
 
   def ongoing?
     !finished?
   end
 
   def finished?
-    RoundFinishedPolicy.new(round: self).finished?
+    self.next.try!(:exists?)
   end
 
   def previous
-    game.rounds.detect { |round| round.number == number - 1 }
+    game.rounds.find_by(number: number - 1)
+  end
+
+  def next
+    game.rounds.find_by(number: number + 1)
   end
 
   private
@@ -53,7 +47,7 @@ class Round < ActiveRecord::Base
 
   def game_id_follows_previous_round
     if previous && previous.game != game
-      errors.add :game_id, "does not match the previous round's game"
+      errors.add :game_id, "is not the same as the previous round's game"
     end
   end
 
@@ -66,12 +60,6 @@ class Round < ActiveRecord::Base
   def number_is_consecutive
     if previous && number != previous.number + 1
       errors.add :number, 'is not consecutive'
-    end
-  end
-
-  def previous_round_finished
-    if previous && previous.ongoing?
-      errors.add :round, 'cannot be created until all players have moved in the previous round'
     end
   end
 end

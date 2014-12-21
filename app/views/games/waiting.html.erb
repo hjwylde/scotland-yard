@@ -3,7 +3,7 @@
 <main data-template="waiting">
   <h2>Players:</h2>
   <ol>
-  <% @game.players.ordered.each do |player| %>
+  <% @game.players.each do |player| %>
     <li><%= "#{player.type} #{player.name}" %></li>
   <% end %>
   </ol>

@@ -1,0 +1,3 @@
+class DetectiveSerializer < PlayerSerializer
+end
+

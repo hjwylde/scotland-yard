@@ -1,61 +1,60 @@
-class PlayersController < ApplicationController
-  before_action :load_game, only: [:index, :create]
-  before_action :load_players, only: [:index]
-  before_action :load_current_player, only: [:index]
-  after_action :save_user, only: [:create]
+class PlayersController < GamesControllerBase
+  before_action :load_players, only: :index
+  before_action :load_ticket_counts, only: :index
+  before_action :load_active_player, only: :active
   respond_to :html, :json
 
-  caches_page :index
+  # Don't check that the user has a player in the current game if we're creating a player for them
+  skip_before_action :validate_game, only: :create
 
   def index
-    if request.xhr? && request.format == 'html'
-      render partial: 'players'
-      return
-    end
+    respond_to do |format|
+      format.html do
+        load_active_player
 
-    render json: @players, each_serializer: PlayerSerializer, current_player: @current_player
+        render partial: 'players'
+      end
+      format.json do
+        # TODO: Doesn't belong here
+        # Don't reveal the criminal to the detectives in the API
+        @players = @players.detectives unless @players.criminals.map(&:user_id).include?(@current_user.id)
+
+        render json: @players, ticket_counts: @ticket_counts
+      end
+    end
+  end
+
+  def active
+    render json: { id: @active_player.try!(:id) }
   end
 
   def create
-    @player = @game.players.new(player_params)
-
-    policy = GameValidPolicy.new(game: @game)
-
-    if !policy.valid?
-      redirect_to @game, alert: 'Player was unable to be created'
-    elsif !@player.save
-      redirect_to @game, alert: @player.errors.full_messages
-    else
-      if @game.players.count == Game::NUMBER_OF_PLAYERS
-        start_round = StartRoundService.new(game: @game)
-        start_round.on :fail do |errors|
-          render json: { errors: errors }, status: :internal_server_error
-          return
-        end
-
-        start_round.call
-      end
-
-      redirect_to @game
+    create_player = CreatePlayerService.new(game: @game, user: @current_user)
+    create_player.on :fail do |errors|
+      render json: { errors: errors }, status: :internal_server_error
+      return
     end
+    create_player.on :success do |player|
+      @player = player
+    end
+
+    create_player.call(player_params)
+
+    redirect_to @game
   end
 
   private
 
-  def load_game
-    @game = Game.includes(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id])
-  end
-
   def load_players
-    @players = @game.players.ordered
+    @players = @game.players
   end
 
-  def load_current_player
-    @current_player = GetCurrentPlayerService.new(game: @game).call
+  def load_ticket_counts
+    @ticket_counts = CountPlayerTicketsService.new(game: @game).call
   end
 
-  def save_user
-    session[:user_id] = @player.id
+  def load_active_player
+    @active_player = GetActivePlayerService.new(game: @game).call
   end
 
   def player_params

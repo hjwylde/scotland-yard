@@ -1,0 +1,3 @@
+class CriminalSerializer < PlayerSerializer
+end
+

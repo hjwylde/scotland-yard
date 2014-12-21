@@ -3,25 +3,56 @@ class StartRoundService
 
   def initialize(game:)
     @game = game
+
+    @errors = []
   end
 
-  def call
-    publish(:fail, ['Game has finished']) and return if @game.finished?
-    publish(:fail, ['Current round has not finished']) and return if @game.current_round && @game.current_round.ongoing?
+  # Starts a new round in the game
+  # Supports overriding the round finished policy (which checks that all movable players have moved)
+  # in order to allow for the criminal to make double moves
+  def call(override_round_finished_policy: false)
+    check_game_not_finished
+    check_current_round_finished if @game.current_round
 
-    round = if @game.initialising?
-      @game.rounds.new(number: Round::STARTING_ROUND_NUMBER)
-    else
-      @game.rounds.new(number: @game.current_round.number + 1)
-    end
+    round = create_round
 
-    if round.save
+    if @errors.empty?
       publish :success, round
     else
-      publish :fail, round.errors.full_messages
+      publish :fail, @errors
+    end
+  end
+
+  private
+
+  def check_game_not_finished
+    if @game.finished?
+      @errors << 'Game has finished'
+    end
+  end
+
+  def check_current_round_finished
+    policy = RoundFinishedPolicy.new(round: @game.current_round)
+    unless policy.finished? || override_round_finished_policy
+      @errors << 'Current round has not finished'
+    end
+  end
+
+  def create_round
+    round = @game.rounds.new(number: next_round_number)
+    if !round.save
+      @errors += round.errors.full_messages
     end
 
-    nil
+    round
+  end
+
+  def next_round_number
+    if @game.initialising?
+      Round::STARTING_ROUND_NUMBER
+    else
+      @game.current_round.number + 1
+    end
   end
 end
 

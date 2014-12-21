@@ -1,6 +1,6 @@
-class GamesController < UsersController
-  before_action :load_games, only: [:index]
-  before_action :load_game, only: [:show]
+class GamesController < SessionsControllerBase
+  before_action :load_games, only: :index
+  before_action :load_game, only: [:show, :status]
   respond_to :html
 
   def new
@@ -11,21 +11,9 @@ class GamesController < UsersController
     if @game.finished?
       render :finished
     elsif @game.initialising?
-      if @user && @user.game == @game
-        render :waiting
-      else
-        @player = Player.new
-
-        render :join
-      end
+      render_game_initialising
     elsif @game.ongoing?
-      if @user && @user.game == @game
-        render :ongoing
-      else
-        render status: :unauthorized
-      end
-    else
-      render status: :internal_server_error
+      render_game_ongoing
     end
   end
 
@@ -42,7 +30,12 @@ class GamesController < UsersController
   private
 
   def load_games
-    @games = Game.includes(:players).all.select(&:initialising?)
+    # Exclude games that are finished or on-going games that don't include the current user
+    # TODO: Put this logic elsewhere, either a scope or query builder
+    # Games relating to user or initialising games
+    @games = Game.preload(:players, :rounds).reject do |game|
+      game.finished? || (game.ongoing? && @current_user.games.exclude?(game))
+    end
   end
 
   def load_game
@@ -51,6 +44,24 @@ class GamesController < UsersController
 
   def game_params
     params.require(:game).permit(:name)
+  end
+
+  def render_game_initialising
+    if @current_user.games.include?(@game)
+      render :waiting
+    else
+      @player = Player.new
+
+      render :join
+    end
+  end
+
+  def render_game_ongoing
+    if @current_user.games.include?(@game)
+      render :ongoing
+    else
+      head :unauthorized
+    end
   end
 end
 

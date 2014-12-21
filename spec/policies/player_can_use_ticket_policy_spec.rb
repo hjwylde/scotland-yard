@@ -9,7 +9,7 @@ RSpec.describe PlayerCanUseTicketPolicy do
   describe '#can_use?' do
     context "when the player has no #{ticket} tickets" do
       before do
-        expect(player).to receive(:tickets_count).and_return({ ticket => 0 })
+        expect(player).to receive(:ticket_counts).and_return({ ticket => 0 })
       end
 
       it 'returns false' do
@@ -19,7 +19,7 @@ RSpec.describe PlayerCanUseTicketPolicy do
 
     context "when the player has some #{ticket} tickets" do
       before do
-        expect(player).to receive(:tickets_count).and_return({ ticket => 1 })
+        expect(player).to receive(:ticket_counts).and_return({ ticket => 1 })
       end
 
       context "but the player's current node doesn't support #{ticket} tickets" do
@@ -34,7 +34,7 @@ RSpec.describe PlayerCanUseTicketPolicy do
 
       context "and the player's current node supports #{ticket} tickets" do
         before do
-          expect(player).to receive(:current_node).and_return instance_double('Node', transport_modes: [ticket.to_s])
+          expect(player).to receive(:current_node).and_return instance_double('Node', transport_modes: [ticket])
         end
 
         it 'returns true' do

@@ -1,0 +1,6 @@
+<%= form_for @user, url: user_path do |f| %>
+  <%= f.label :name, 'Name: ' %>
+  <%= f.text_field :name, required: true, autofocus: true %>
+  <%= f.submit 'Create' %>
+<% end %>
+
