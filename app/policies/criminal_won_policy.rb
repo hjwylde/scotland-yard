@@ -19,8 +19,10 @@ class CriminalWonPolicy
   end
 
   def detectives_cannot_move?
+    ticket_counts = CountPlayerTicketsService.new(game: @game).call
+
     @game.detectives.none? do |detective|
-      PlayerCanMovePolicy.new(player: detective).can_move?
+      PlayerCanMovePolicy.new(player: detective, cache: { ticket_counts: ticket_counts }).can_move?
     end
   end
 end

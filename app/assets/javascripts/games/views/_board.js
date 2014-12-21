@@ -7,7 +7,6 @@
 
   var init = function() {
     // Initialise the user
-    // TODO: Remove this once all.js finished
     var promise = User.load();
     promise.done(function(user) {
       Renderer.render();

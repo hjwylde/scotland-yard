@@ -1,8 +1,9 @@
 class MoveValidPolicy
   include Wisper::Publisher
 
-  def initialize(player:, to_node:, ticket:)
+  def initialize(player:, to_node:, ticket:, cache: Hash.new({}))
     @player, @to_node, @ticket = player, to_node, ticket.to_sym
+    @cache = cache
 
     @errors = []
   end
@@ -21,8 +22,6 @@ class MoveValidPolicy
   private
 
   def check_player_can_use_ticket
-    ticket_counts = CountPlayerTicketsService.new(player: @player).call
-
     if !PlayerCanUseTicketPolicy.new(player: @player).can_use?(ticket: @ticket, count: ticket_counts[@ticket])
       @errors << "You cannot use a #{@ticket} ticket"
     end
@@ -46,6 +45,10 @@ class MoveValidPolicy
     if @player.detective? && @player.game.detectives.map(&:current_node_id).include?(@to_node.id)
       @errors << 'Someone else is already there'
     end
+  end
+
+  def ticket_counts
+    @cache[:ticket_counts][@player.id] || @player.ticket_counts
   end
 end
 

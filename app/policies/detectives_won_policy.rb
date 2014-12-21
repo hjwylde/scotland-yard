@@ -6,13 +6,13 @@ class DetectivesWonPolicy
   # Policy for determining if the detectives have won
   # The detectives win if the criminal has lost on any of the rounds
   def won?
-    @game.rounds.any? { |round| criminal_lost?(round) }
+    criminal_lost?(@game.current_round)
   end
 
   private
 
   def criminal_lost?(round)
-    return false if round.moves.of_criminals.empty?
+    return false if !round || round.moves.of_criminals.empty?
 
     criminal_node_id = round.moves.of_criminals.first.to_node_id
 

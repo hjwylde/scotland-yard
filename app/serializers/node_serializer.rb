@@ -9,7 +9,7 @@ class NodeSerializer < ActiveModel::Serializer
     if node_routes
       (node_routes[object.id].flat_map { |route| [route.from_node_id, route.to_node_id] }).uniq - [object.id]
     else
-      Rails.logger.warn('Unoptimised call to NodeSerializer: it should include a :node_routes argument')
+      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :node_routes argument'
 
       object.linked_node_ids
     end
@@ -20,7 +20,7 @@ class NodeSerializer < ActiveModel::Serializer
     if node_routes
       node_routes[object.id].map(&:transport_mode).uniq
     else
-      Rails.logger.warn('Unoptimised call to NodeSerializer: it should include a :node_routes argument')
+      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :node_routes argument'
 
       object.transport_modes
     end

@@ -11,8 +11,9 @@ class MakeMoveService
 
   include Wisper::Publisher
 
-  def initialize(player:, to_node:, ticket:)
+  def initialize(player:, to_node:, ticket:, cache: Hash.new({}))
     @player, @to_node, @ticket = player, to_node, ticket.to_sym
+    @cache = cache
   end
 
   def call
@@ -30,7 +31,7 @@ class MakeMoveService
   private
 
   def check_move_is_valid
-    policy = MoveValidPolicy.new(player: @player, to_node: @to_node, ticket: @ticket)
+    policy = MoveValidPolicy.new(player: @player, to_node: @to_node, ticket: @ticket, cache: { ticket_counts: ticket_counts })
     policy.on :fail do |errors|
       raise Error.new(errors)
     end
@@ -45,6 +46,10 @@ class MakeMoveService
     end
 
     move
+  end
+
+  def ticket_counts
+    @cache[:ticket_counts] || CountPlayerTicketsService.new(game: @player.game).call
   end
 end
 

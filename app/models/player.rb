@@ -47,7 +47,9 @@ class Player < ActiveRecord::Base
   end
 
   def ticket_counts
-    CountPlayerTicketsService.new(player: self).call
+    Rails.logger.warn 'Potentially unoptimised call to player#ticket_counts'
+
+    CountPlayerTicketsService.new(game: game).call[id]
   end
 
   private

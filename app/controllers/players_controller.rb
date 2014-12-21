@@ -1,5 +1,6 @@
 class PlayersController < GamesControllerBase
   before_action :load_players, only: :index
+  before_action :load_ticket_counts, only: :index
   before_action :load_active_player, only: :active
   respond_to :html, :json
 
@@ -18,7 +19,7 @@ class PlayersController < GamesControllerBase
         # Don't reveal the criminal to the detectives in the API
         @players = @players.detectives unless @players.criminals.map(&:user_id).include?(@current_user.id)
 
-        render json: @players
+        render json: @players, ticket_counts: @ticket_counts
       end
     end
   end
@@ -46,6 +47,10 @@ class PlayersController < GamesControllerBase
 
   def load_players
     @players = @game.players
+  end
+
+  def load_ticket_counts
+    @ticket_counts = CountPlayerTicketsService.new(game: @game).call
   end
 
   def load_active_player
