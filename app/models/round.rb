@@ -2,6 +2,7 @@ class Round < ActiveRecord::Base
   STARTING_ROUND_NUMBER = 1
 
   belongs_to :game, inverse_of: :rounds
+
   has_many :moves, lambda { ordered }, inverse_of: :round, dependent: :destroy
   has_many :players, lambda { includes(:rounds).ordered }, through: :moves
 
@@ -9,8 +10,6 @@ class Round < ActiveRecord::Base
   # For an on-going game, a round is finished if it is not the last one
   # We don't care that the last one should be included for a finished game
   scope :finished, lambda { where('number < ?', maximum(:number)) }
-  # Extra rounds are the criminal's double move ones (i.e., they only contain a single move)
-  scope :extra, lambda { finished.joins(:moves).group('rounds.id').having('COUNT(*) == 1') }
 
   before_validation :init_default_number
 
@@ -28,7 +27,7 @@ class Round < ActiveRecord::Base
   end
 
   def finished?
-    self.next.try!(:exists?)
+    self.next
   end
 
   def previous

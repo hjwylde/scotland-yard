@@ -9,6 +9,10 @@
       <p>Tickets:</p>
       <%= show_player_ticket_counts(player: player, ticket_counts: @ticket_counts[player.id]) %>
     </div>
+    <div class="tokens">
+      <p>Tokens</p>
+      <%= show_player_token_counts(player: player, token_counts: @token_counts[player.id]) %>
+    </div>
 
     <div class="moves">
       <%= show_player_moves(player: player) %>

@@ -2,6 +2,7 @@ class Player < ActiveRecord::Base
   belongs_to :game, inverse_of: :players
   belongs_to :user, inverse_of: :players
   belongs_to :origin_node, class_name: 'Node', inverse_of: :players
+
   has_many :moves, lambda { includes(:round).ordered }, inverse_of: :player, dependent: :destroy
   has_many :rounds, lambda { ordered }, through: :moves
 
@@ -46,12 +47,6 @@ class Player < ActiveRecord::Base
     moves.last.try!(:to_node_id) || origin_node_id
   end
 
-  def ticket_counts
-    Rails.logger.warn 'Potentially unoptimised call to player#ticket_counts'
-
-    CountPlayerTicketsService.new(game: game).call[id]
-  end
-
   private
 
   def init_random_origin_node
@@ -59,7 +54,7 @@ class Player < ActiveRecord::Base
   end
 
   def origin_node_is_origin_node
-    if origin_node && !origin_node.origin?
+    if !origin_node.try!(:origin?)
       errors.add :origin_node_id, 'is not an origin node'
     end
   end

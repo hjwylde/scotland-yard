@@ -35,14 +35,6 @@ class CountPlayerTicketsService
       ticket_counts[key] = Hash[values.map { |value| value[1..-1] }]
     end
 
-    # Double move tickets are counted by the rounds with only a single player in them
-    # TODO: Re-name 'extra'
-    # TODO: Unclear what this line does
-    # Think about separating out double move from tickets - they're different concepts
-    @game.players.includes(:rounds).each do |player|
-      ticket_counts[player.id][:double_move] = player.rounds.extra.length
-    end
-
     ticket_counts
   end
 end

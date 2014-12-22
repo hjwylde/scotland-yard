@@ -5,9 +5,17 @@ module PlayersHelper
 
   def show_player_ticket_counts(player:, ticket_counts:)
     ticket_counts.select do |ticket, count|
-      player.criminal? || [:black, :double_move].exclude?(ticket)
+      player.criminal? || ticket != :black
     end.reduce('') do |html, (ticket, count)|
       html + (content_tag :div, count, class: [:ticket, ticket.to_s.gsub(/_/, '-')])
+    end.html_safe
+  end
+
+  def show_player_token_counts(player:, token_counts:)
+    token_counts.select do |token, count|
+      player.criminal?
+    end.reduce('') do |html, (token, count)|
+      html + (content_tag :div, count, class: [:token, token.to_s.gsub(/_/, '-')])
     end.html_safe
   end
 

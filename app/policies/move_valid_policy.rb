@@ -1,8 +1,8 @@
 class MoveValidPolicy
   include Wisper::Publisher
 
-  def initialize(player:, to_node:, ticket:, cache: Hash.new({}))
-    @player, @to_node, @ticket = player, to_node, ticket.to_sym
+  def initialize(player:, to_node:, ticket:, token: nil, cache: Hash.new({}))
+    @player, @to_node, @ticket, @token = player, to_node, ticket.to_sym, token.try!(:to_sym)
     @cache = cache
 
     @errors = []
@@ -10,6 +10,7 @@ class MoveValidPolicy
 
   def valid?
     check_player_can_use_ticket
+    check_player_can_use_token if @token
     check_is_turn_of_player
     check_route_exists
     check_destination_is_empty
@@ -24,6 +25,12 @@ class MoveValidPolicy
   def check_player_can_use_ticket
     if !PlayerCanUseTicketPolicy.new(player: @player).can_use?(ticket: @ticket, count: ticket_counts[@ticket])
       @errors << "You cannot use a #{@ticket} ticket"
+    end
+  end
+
+  def check_player_can_use_token
+    if !PlayerCanUseTokenPolicy.new(player: @player).can_use?(token: @token, count: token_counts[@token])
+      @errors << "You cannot use a #{@token} token"
     end
   end
 
@@ -48,7 +55,11 @@ class MoveValidPolicy
   end
 
   def ticket_counts
-    @cache[:ticket_counts][@player.id] || @player.ticket_counts
+    @cache[:ticket_counts][@player.id] || CountPlayerTicketsService.new(game: @player.game).call[@player.id]
+  end
+
+  def token_counts
+    @cache[:token_counts][@player.id] || CountPlayerTokensService.new(game: @player.game).call[@player.id]
   end
 end
 

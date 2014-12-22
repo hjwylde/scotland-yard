@@ -10,7 +10,7 @@ class GamesControllerBase < SessionsControllerBase
   end
 
   def load_current_player
-    @current_player = @game.players.where(user_id: @current_user.id)
+    @current_player = @game.players.find_by(user_id: @current_user.id)
   end
 
   def validate_game

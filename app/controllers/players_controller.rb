@@ -1,6 +1,7 @@
 class PlayersController < GamesControllerBase
   before_action :load_players, only: :index
   before_action :load_ticket_counts, only: :index
+  before_action :load_token_counts, only: :index
   before_action :load_active_player, only: :active
   respond_to :html, :json
 
@@ -51,6 +52,10 @@ class PlayersController < GamesControllerBase
 
   def load_ticket_counts
     @ticket_counts = CountPlayerTicketsService.new(game: @game).call
+  end
+
+  def load_token_counts
+    @token_counts = CountPlayerTokensService.new(game: @game).call
   end
 
   def load_active_player

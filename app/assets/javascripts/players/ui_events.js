@@ -55,7 +55,7 @@
   };
 
   var onDoubleMoveClick = function() {
-    $('#players').on('click', '.criminal.me.turn .ticket.double-move', function() {
+    $('#players').on('click', '.criminal.me.turn .token.double-move', function() {
       User.toggleDoubleMove();
 
       $(this).toggleClass('active', User.doubleMove);

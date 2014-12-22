@@ -4,10 +4,11 @@ class Game < ActiveRecord::Base
 
   has_many :players, lambda { ordered }, inverse_of: :game, dependent: :destroy
   has_many :rounds, lambda { ordered }, inverse_of: :game, dependent: :destroy
+  has_many :moves, lambda { ordered }, through: :rounds
 
   before_validation :init_default_name
 
-  validates :name, presence: true
+  validates :name, length: { minimum: 1 }
   # TODO: Check that this validation is done when a player is saved
   validates :players, length: { maximum: NUMBER_OF_PLAYERS }
 

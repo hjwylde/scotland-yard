@@ -11,8 +11,8 @@ class MakeMoveService
 
   include Wisper::Publisher
 
-  def initialize(player:, to_node:, ticket:, cache: Hash.new({}))
-    @player, @to_node, @ticket = player, to_node, ticket.to_sym
+  def initialize(player:, to_node:, ticket:, token: nil, cache: Hash.new({}))
+    @player, @to_node, @ticket, @token = player, to_node, ticket.to_sym, token.try!(:to_sym)
     @cache = cache
   end
 
@@ -21,6 +21,7 @@ class MakeMoveService
       check_move_is_valid
 
       move = create_move
+      start_round if @token == :double_move || current_round_finished?
 
       publish :success, move
     end
@@ -31,7 +32,8 @@ class MakeMoveService
   private
 
   def check_move_is_valid
-    policy = MoveValidPolicy.new(player: @player, to_node: @to_node, ticket: @ticket, cache: { ticket_counts: ticket_counts })
+    policy = MoveValidPolicy.new(player: @player, to_node: @to_node, ticket: @ticket, token: @token,
+                                 cache: { ticket_counts: ticket_counts, token_counts: token_counts })
     policy.on :fail do |errors|
       raise Error.new(errors)
     end
@@ -48,8 +50,25 @@ class MakeMoveService
     move
   end
 
+  def start_round
+    start_round = StartRoundService.new(game: @player.game)
+    start_round.on :fail do |errors|
+      raise Error.new(errors)
+    end
+
+    start_round.call(override_round_finished_policy: @token == :double_move)
+  end
+
+  def current_round_finished?
+    RoundFinishedPolicy.new(round: @player.game.current_round).finished?
+  end
+
   def ticket_counts
     @cache[:ticket_counts] || CountPlayerTicketsService.new(game: @player.game).call
+  end
+
+  def token_counts
+    @cache[:token_counts] || CountPlayerTokensService.new(game: @player.game).call
   end
 end
 
