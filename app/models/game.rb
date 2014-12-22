@@ -7,7 +7,7 @@ class Game < ActiveRecord::Base
 
   before_validation :init_default_name
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true
   # TODO: Check that this validation is done when a player is saved
   validates :players, length: { maximum: NUMBER_OF_PLAYERS }
 
