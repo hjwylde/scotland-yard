@@ -18,8 +18,8 @@ window.User = new function() {
   this.toggleDoubleMove = function() {
     this.doubleMove = !this.doubleMove;
 
-    // Client-side validation that the player can use a double move ticket
-    if (this.player().ticket_counts['double-move'] <= 0 || this.player().type != 'Criminal') {
+    // Client-side validation that the player can use a double move token
+    if (this.player().token_counts['double_move'] <= 0 || this.player().type != 'Criminal') {
       this.doubleMove = false;
     }
 

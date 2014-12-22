@@ -27,6 +27,16 @@ section#players
       div.current-node
         margin: auto
 
+    div.tickets, div.tokens
+      display: flex
+
+      p
+        flex: 1
+        margin: 0
+
+    &.detective div.tokens
+      display: none
+
     div.moves
       display: flex
       flex-wrap: wrap
@@ -35,7 +45,7 @@ section#players
     &.detective div.moves
       display: none
 
-    div.move, div.current-node, div.ticket
+    div.move, div.current-node, div.ticket, div.token
       display: inline-block
 
       box-sizing: border-box
@@ -68,14 +78,7 @@ section#players
         &.active
           background: $yellow
 
-    div.tickets
-      display: flex
-
-      p
-        flex: 1
-        margin: 0
-
-    div.ticket
+    div.ticket, div.token
       width: 24px
       height: 24px
       border-radius: 12px

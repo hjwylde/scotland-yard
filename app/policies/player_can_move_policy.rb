@@ -9,9 +9,8 @@ class PlayerCanMovePolicy
   end
 
   # Policy for determining if a player can move
-  # A player can move provided that they can use any of their tickets
-  # This policy doesn't check whether a player 'may' move (i.e., is the game on-going? Has the round finished? Is it their
-  # turn? etc.).
+  # A player can move provided that
+  # 1) they can use any of their tickets
   def can_move?
     counts = ticket_counts
 
@@ -36,8 +35,7 @@ class PlayerCanMovePolicy
 
   def player_can_use_tickets(counts)
     policy = PlayerCanUseTicketPolicy.new(player: @player)
-    # TODO: Double move tickets should be separate
-    (Move::TICKET_TYPES - [:double_move]).any? do |ticket|
+    Move::TICKET_TYPES.any? do |ticket|
       if counts[ticket] > 0
         policy.can_use?(ticket: ticket, count: counts[ticket])
       end
@@ -45,7 +43,7 @@ class PlayerCanMovePolicy
   end
 
   def ticket_counts
-    @cache[:ticket_counts][@player.id] || @player.ticket_counts
+    @cache[:ticket_counts][@player.id] || CountPlayerTicketsService.new(game: @player.game).call[@player.id]
   end
 end
 

@@ -34,7 +34,13 @@
         return;
       }
 
-      var promise = Savers.savePlayerMove(Game.id, User.player().id, { move: { to_node_id: toNodeId, ticket: ticket.toLowerCase() }, double_move: User.doubleMove })
+      var promise = Savers.savePlayerMove(Game.id, User.player().id, {
+        move: {
+          to_node_id: toNodeId,
+          ticket: ticket.toLowerCase(),
+          token: User.doubleMove ? 'double_move' : null
+        }
+      })
       promise.done(function() {
         Game.refresh().done(function() {
           User.doubleMove = false;
