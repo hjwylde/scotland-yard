@@ -1,6 +1,5 @@
 <%= form_for @user, url: session_path do |f| %>
-  <%= f.label :name, 'Name: ' %>
-  <%= f.text_field :name, required: true, autofocus: true %>
-  <%= f.submit 'Login' %>
+  <%= f.text_field :name, required: true, autofocus: true, placeholder: 'Username' %>
+  <%= f.submit 'Proceed' %>
 <% end %>
 
