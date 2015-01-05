@@ -9,20 +9,7 @@ class PlayersController < GamesControllerBase
   skip_before_action :validate_game, only: :create
 
   def index
-    respond_to do |format|
-      format.html do
-        load_active_player
-
-        render partial: 'players'
-      end
-      format.json do
-        # TODO: Doesn't belong here
-        # Don't reveal the criminal to the detectives in the API
-        @players = @players.detectives unless @players.criminals.map(&:user_id).include?(@current_user.id)
-
-        render json: @players, ticket_counts: @ticket_counts
-      end
-    end
+    render json: @players, current_player: @current_player, ticket_counts: @ticket_counts, token_counts: @token_counts
   end
 
   def active

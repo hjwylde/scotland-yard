@@ -38,8 +38,8 @@ Rails.application.configure do
 end
 
 Rails.application.config.after_initialize do
-  Bullet.enable = true
+  Bullet.enable = false
   Bullet.bullet_logger = true
-  Bullet.alert = true
+  Bullet.alert = false
 end
 

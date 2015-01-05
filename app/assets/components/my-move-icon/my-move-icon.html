@@ -1,0 +1,11 @@
+<polymer-element name="my-move-icon" attributes="nodeId ticket">
+  <template>
+    <link rel="stylesheet" href="my-move-icon.css" />
+
+    <div class="{{ticket}}" on-mouseover="{{onMouseOver}}" on-mouseout="{{onMouseOut}}" horizontal
+      layout center-justified center>{{nodeId}}</div>
+  </template>
+
+  <script src="my-move-icon.js"></script>
+</polymer-element>
+

@@ -1,6 +1,8 @@
+<%= content_for :'template-name', 'waiting' %>
+
 <%= render 'header' %>
 
-<main data-template="waiting">
+<main>
   <h2>Players:</h2>
   <ol>
   <% @game.players.each do |player| %>

@@ -1,0 +1,57 @@
+@import 'colours'
+
+\:host
+  display: block
+
+  margin: 10px
+
+  background: white
+
+.card
+  &.Detective
+    header span
+      color: $detective
+
+    #tokens, #moves
+      display: none
+
+  &.Criminal
+    header span
+      color: $criminal
+
+  // TODO: Re-name this class to active
+  &.true
+    header span
+      color: $red_500
+
+header
+  width: 100%
+  border-bottom: 1px solid $black_12
+
+  span
+    box-sizing: border-box
+    width: 80%
+    padding: 10px
+
+    font-size: 1.8em
+
+#tickets, #tokens
+  box-sizing: border-box
+  width: 100%
+  padding: 10px
+
+  span
+    font-size: 1.4em
+
+my-ticket-icon
+  margin-left: 0.5em
+
+#moves
+  box-sizing: border-box
+  width: 100%
+  padding: 0 10px 10px
+
+my-move-icon
+  width: 20%
+  height: 38px
+

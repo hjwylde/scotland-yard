@@ -21,7 +21,9 @@ class MakeMoveService
       check_move_is_valid
 
       move = create_move
-      start_round if @token == :double_move || current_round_finished?
+      if @token == :double_move || current_round_finished?
+        start_round unless @player.game.finished?
+      end
 
       publish :success, move
     end

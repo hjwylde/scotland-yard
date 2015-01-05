@@ -1,6 +1,10 @@
 class PlayerSerializer < ActiveModel::Serializer
   attributes :id, :type, :name, :current_node_id, :ticket_counts, :token_counts
 
+  def current_node_id
+    object.current_node_id if object.detective? || @options[:current_player].try!(:criminal?)
+  end
+
   def ticket_counts
     if @options[:ticket_counts]
       @options[:ticket_counts][object.id]

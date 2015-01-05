@@ -3,12 +3,11 @@ window.Helpers = (function(module) {
     if (!Notification) {
       return null;
     } else if (Notification.permission === 'default') {
-      Notification.requestPermission((function(permission) {
+      Notification.requestPermission(function(permission) {
         this.createNotification(tag, body);
-      }).bind(this));
+      }.bind(this));
     }
 
-    // TODO: Don't hardcore the asset url
     var notification = new Notification(document.title, {
       tag: tag,
       body: body,

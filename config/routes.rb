@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get '/rounds/current', to: 'rounds#current'
 
     resources :players, only: [:index, :create] do
-      resources :moves, only: :create
+      resources :moves, only: [:index, :create]
     end
     get '/players/active', to: 'players#active'
   end
