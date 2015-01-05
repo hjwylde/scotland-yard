@@ -1,0 +1,45 @@
+<polymer-element name="my-player-card" attributes="playerId">
+  <template>
+    <link rel="stylesheet" href="my-player-card.css" />
+
+    <paper-shadow z="1">
+      <template bind="{{player}}">
+        <section class="card {{type}} {{isActive()}}" vertical layout start>
+          <header on-mouseover="{{onMouseOver}}" on-mouseout="{{onMouseOut}}" horizontal layout>
+            <span>{{name}}</span>
+
+            <template if="{{isDetective()}}">
+              <my-move-icon nodeId="{{current_node_id}}"></my-move-icon>
+            </template>
+          </header>
+
+          <template bind="{{ticket_counts}}">
+            <section id="tickets" horizontal layout center end-justified>
+              <span flex>Tickets:</span>
+              <my-ticket-icon ticket="taxi" count="{{taxi}}"></my-ticket-icon>
+              <my-ticket-icon ticket="bus" count="{{bus}}"></my-ticket-icon>
+              <my-ticket-icon ticket="underground" count="{{underground}}"></my-ticket-icon>
+              <my-ticket-icon ticket="black" count="{{black}}"></my-ticket-icon>
+            </section>
+          </template>
+
+          <template bind="{{token_counts}}" if="{{isCriminal()}}">
+            <section id="tokens" horizontal layout center end-justified>
+              <span flex>Tokens:</span>
+              <my-token-icon token="double-move" count="{{double_move}}"></my-token-icon>
+            </section>
+          </template>
+
+          <section id="moves" horizontal layout wrap>
+            <template repeat="{{moves}}" if="{{isCriminal()}}">
+              <my-move-icon nodeId="{{to_node_id}}" ticket="{{ticket}}"></my-move-icon>
+            </template>
+          </section>
+        </section>
+      </template>
+    </paper-shadow>
+  </template>
+
+  <script src="my-player-card.js"></script>
+</polymer-element>
+

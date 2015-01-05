@@ -12,7 +12,7 @@ class StartRoundService
   # in order to allow for the criminal to make double moves
   def call(override_round_finished_policy: false)
     check_game_not_finished
-    check_current_round_finished if @game.current_round
+    check_current_round_finished if @game.current_round && !override_round_finished_policy
 
     round = create_round
 
@@ -33,7 +33,7 @@ class StartRoundService
 
   def check_current_round_finished
     policy = RoundFinishedPolicy.new(round: @game.current_round)
-    unless policy.finished? || override_round_finished_policy
+    if !policy.finished?
       @errors << 'Current round has not finished'
     end
   end

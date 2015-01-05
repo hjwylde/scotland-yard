@@ -9,7 +9,7 @@
   // PRIVATE
 
   var poll = function(timeout) {
-    var promise = Loaders.loadCurrentRound(Game.id);
+    var promise = Loaders.loadGameRoundsCurrent(Game.id);
     promise.done(function(currentRound) {
       if (JSON.stringify(currentRound) !== JSON.stringify(Game.currentRound)) {
         Game.refresh().done(function() {

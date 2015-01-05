@@ -1,0 +1,26 @@
+@import 'colours'
+
+\:host
+  display: block
+
+  cursor: default
+  user-select: none
+  -webkit-user-select: none
+
+.token
+  width: 24px
+  height: 24px
+  border-radius: 50%
+  border: 1px solid $black_87
+
+  line-height: 26px
+  text-align: center
+
+  font-family: 'Roboto Slab'
+
+  &.double-move
+    background: $double_move
+
+  &.active
+    border-color: $red_500
+

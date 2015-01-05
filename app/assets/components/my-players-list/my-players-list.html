@@ -1,0 +1,12 @@
+<polymer-element name="my-players-list">
+  <template>
+    <link rel="stylesheet" href="my-players-list.css" />
+
+    <template repeat="{{players}}">
+      <my-player-card playerId="{{id}}"></my-player-card>
+    </template>
+  </template>
+
+  <script src="my-players-list.js"></script>
+</polymer-element>
+

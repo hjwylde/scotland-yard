@@ -9,9 +9,11 @@ class GetActivePlayerService
   # The players are ordered naturally by first type (such that the criminal moves first) and then id
   # A player is only considered in the to-move queue if they haven't moved yet and they can move
   def call
+    return unless @game.ongoing?
+
     ticket_counts = CountPlayerTicketsService.new(game: @game).call
 
-    unmoved_players.detect { |player| player_can_move?(player, ticket_counts) } if @game.ongoing?
+    unmoved_players.detect { |player| player_can_move?(player, ticket_counts) }
   end
 
   private

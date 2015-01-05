@@ -1,8 +1,13 @@
-<%= render 'header' %>
+<%= content_for :'template-name', 'new' %>
 
-<h1>New game</h1>
+<core-header-panel flex>
+  <core-toolbar horizontal layout center>
+    <paper-icon-button icon="arrow-back" title="Back"></paper-icon-button>
+    <p class="title"><%= Game::NAME %></p>
+  </core-toolbar>
 
-<%= render 'form' %>
-
-<%= link_to 'Back', games_path %>
+  <main flex horizontal layout center-justified center>
+    <%= render 'form' %>
+  </main>
+</core-header-panel>
 

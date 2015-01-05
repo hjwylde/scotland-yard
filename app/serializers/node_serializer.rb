@@ -1,40 +1,35 @@
 class NodeSerializer < ActiveModel::Serializer
-  attributes :id, :origin, :fixed, :x, :y, :linked_node_ids, :transport_modes
+  attributes :id, :origin, :x, :y, :adjacent_node_ids, :transport_modes
 
-  # The standard query is extremely inefficient when trying to get the linked node ids for all
+  # The standard query is extremely inefficient when trying to get the adjacent node ids for all
   # nodes
   # This optimises it by using a single query (of all routes) and performing a soft selection
-  # to calculate the linked node ids
-  def linked_node_ids
-    if node_routes
-      (node_routes[object.id].flat_map { |route| [route.from_node_id, route.to_node_id] }).uniq - [object.id]
+  # to calculate the adjacent node ids
+  def adjacent_node_ids
+    if board
+      board.adjacency_list[object.id]
     else
-      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :node_routes argument'
+      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :board argument'
 
-      object.linked_node_ids
+      object.adjacent_node_ids
     end
   end
 
-  # As per above, this attribute is optimised when passed all routes
+  # As per above, this attribute is optimised when passed a board
   def transport_modes
-    if node_routes
-      node_routes[object.id].map(&:transport_mode).uniq
+    if board
+      board.node_routes[object.id].map(&:transport_mode).uniq
     else
-      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :node_routes argument'
+      Rails.logger.warn 'Unoptimised call to NodeSerializer: it should include a :board argument'
 
       object.transport_modes
     end
   end
 
-  # TODO: Remove fixed
-  def fixed
-    object.x.present? && object.y.present?
-  end
-
   private
 
-  def node_routes
-    @options[:node_routes]
+  def board
+    @options[:board]
   end
 end
 

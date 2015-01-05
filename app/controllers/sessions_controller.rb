@@ -8,11 +8,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if @current_user
-      redirect_to root_path
-    else
-      redirect_to new_session_path, alert: ["Could not find a user with name '#{user_params['name']}'"]
-    end
+    redirect_to root_path
   end
 
   def destroy
@@ -22,7 +18,7 @@ class SessionsController < ApplicationController
   private
 
   def load_current_user
-    @current_user = User.find_by(user_params)
+    @current_user = User.find_by(user_params) || User.create!(user_params)
   end
 
   def save_session

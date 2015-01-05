@@ -1,0 +1,27 @@
+<!-- TODO: Order the games by creation date -->
+<!-- TODO: Make the games in square cards that tile -->
+<!-- TODO: Make the cards random-ish colours -->
+<polymer-element name="my-games-list" attributes="header status">
+  <template>
+    <link rel="stylesheet" href="my-games-list.css" />
+
+    <header>
+      <p>{{header}}</p>
+    </header>
+
+    <paper-shadow z="1">
+      <core-list data="{{games}}" on-core-activate="{{onTap}}">
+        <template>
+          <paper-item flex>
+            <span class="fraction"><sup>{{model.player_count}}</sup>&frasl;<sub>{{model.max_player_count}}</sub></span>
+            <span>{{model.name}}</span>
+          </paper-item>
+        </template>
+        &nbsp;
+      </core-list>
+    </paper-shadow>
+  </template>
+
+  <script src="my-games-list.js" />
+</polymer-element>
+

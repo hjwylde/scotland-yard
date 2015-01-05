@@ -18,9 +18,10 @@ class CreatePlayerService
   def call(player_params)
     @game.with_lock do
       check_user_not_in_game
-      check_game_is_valid
 
       player = create_player(player_params)
+      check_game_is_valid
+
       start_round if game_full?
 
       publish :success, player
@@ -47,8 +48,8 @@ class CreatePlayerService
   end
 
   def create_player(player_params)
-    player = @user.players.new(player_params)
-    player.game_id = @game.id
+    player = @game.players.new(player_params)
+    player.user_id = @user.id
     if !player.save
       raise Error.new(player.errors.full_messages)
     end
