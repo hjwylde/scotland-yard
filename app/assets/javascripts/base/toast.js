@@ -4,7 +4,7 @@ window.Toast = new function() {
   this.info = function(text) {
     dismissToasts();
 
-    createToast('info'. text).get(0).show();
+    createToast('info', text).get(0).show();
   };
 
   this.error = function(text) {

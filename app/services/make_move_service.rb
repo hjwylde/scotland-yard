@@ -44,7 +44,7 @@ class MakeMoveService
   end
 
   def create_move
-    move = @player.moves.new(round: @player.game.current_round, to_node: @to_node, ticket: @ticket)
+    move = @player.moves.new(to_node: @to_node, ticket: @ticket)
     if !move.save
       raise Error.new(move.errors.full_messages)
     end
