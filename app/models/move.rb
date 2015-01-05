@@ -11,6 +11,8 @@ class Move < ActiveRecord::Base
   scope :of_criminals, lambda { joins(:player).where('players.type' => Criminal) }
   scope :double, lambda { group(:round_id).having('COUNT(*) == 1') }
 
+  before_validation :set_round
+
   validates :round_id, :player_id, :to_node_id, :ticket, presence: true
   validates :player_id, uniqueness: { scope: :round_id }
   validates :ticket, inclusion: { in: TICKET_TYPES }
@@ -20,9 +22,13 @@ class Move < ActiveRecord::Base
 
   private
 
+  def set_round
+    self.round ||= player.try!(:game).try!(:current_round)
+  end
+
   def player_is_in_the_game
     if round.game.players.exclude?(player)
-      errors.add :player_id, 'is not in this game'
+      errors.add :player, 'is not in this game'
     end
   end
 
