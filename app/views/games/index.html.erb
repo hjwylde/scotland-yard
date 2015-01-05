@@ -1,19 +1,19 @@
-<header>
-  <h1>Games</h1>
-</header>
+<%= content_for :'template-name', 'index' %>
 
-<main data-template="index">
-  <ul>
-    <% @games.each do |game| %>
-      <li>
-        <%= link_to game.name, game %>
-        (<%= number_of_spots_available(game: game) %> available)
-      </li>
-    <% end %>
-  </ul>
+<core-header-panel flex>
+  <core-toolbar horizontal layout center>
+    <paper-icon-button icon="radio-button-off" disabled></paper-icon-button>
+    <p class="title"><%= Game::NAME %></p>
+  </core-toolbar>
 
-  <p>
-    <%= link_to 'New Game', new_game_path %>
-  </p>
-</main>
+  <main flex horizontal layout center-justified>
+    <section id="games">
+      <my-games-list header="On-going games" status="ongoing" flex></my-games-list>
+
+      <my-games-list header="Friends' games" status="initialising" flex></my-games-list>
+    </section>
+
+    <my-new-game-fab id="new-game"></my-new-game-fab>
+  </main>
+</core-header-panel>
 

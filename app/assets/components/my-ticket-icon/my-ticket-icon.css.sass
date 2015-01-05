@@ -1,0 +1,29 @@
+@import 'colours'
+
+\:host
+  display: block
+
+  cursor: default
+  user-select: none
+  -webkit-user-select: none
+
+.ticket
+  width: 24px
+  height: 24px
+  border-radius: 50%
+  border: 1px solid $black_87
+
+  line-height: 26px
+  text-align: center
+
+  font-family: 'Roboto Slab'
+
+  &.taxi
+    background: $taxi
+  &.bus
+    background: $bus
+  &.underground
+    background: $underground
+  &.black
+    background: $black
+

@@ -1,6 +1,6 @@
 <%= form_for @game do |f| %>
-  <%= f.label :name, 'Name: ' %>
-  <%= f.text_field :name, required: true, autofocus: true %>
+  <%= f.text_field :name, required: true, autofocus: true, placeholder: 'Name',
+    pattern: '[a-zA-Z0-9_\- ]+' %>
   <%= f.submit %>
 <% end %>
 

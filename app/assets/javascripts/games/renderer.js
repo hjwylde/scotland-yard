@@ -17,7 +17,6 @@ window.Renderer = new function() {
 
   this.refresh = function() {
     renderPlayers();
-    renderPlayersPanel();
   };
 
   // PRIVATE
@@ -26,13 +25,13 @@ window.Renderer = new function() {
   var height = 1130;
 
   var createSvg = function() {
-    svg()
+    Svg.root()
       .attr('viewBox', '0 0 ' + width + ' ' + height)
       .attr('preserveAspectRatio', 'xMidYMid meet');
   };
 
   var createRoutes = function() {
-    svgRoutes()
+    Svg.routes()
       .data(Board.routes)
       .enter().append('line')
       .attr('class', function(route) { return 'route ' + route.transport_mode; })
@@ -43,7 +42,7 @@ window.Renderer = new function() {
   };
 
   var createNodes = function() {
-    svgNodes()
+    Svg.nodes()
       .data(Board.nodes)
       .enter().append('circle')
       .attr('class', function(node) { return 'node ' + node.transport_modes.join(' '); })
@@ -54,8 +53,8 @@ window.Renderer = new function() {
   };
 
   var createPlayers = function() {
-    svgPlayers()
-      .data(Game.players)
+    Svg.players()
+      .data(User.player().isCriminal() ? Game.players : Game.detectives())
       .enter().append('circle')
       .attr('class', function(player) {
         return 'player ' +
@@ -70,7 +69,7 @@ window.Renderer = new function() {
   };
 
   var createNodeLabels = function() {
-    svgNodeLabels()
+    Svg.nodeLabels()
       .data(Board.nodes)
       .enter().append('text')
       .attr('class', 'node')
@@ -83,46 +82,22 @@ window.Renderer = new function() {
 
   var renderPlayers = function() {
     // Move the players
-    svgPlayers().transition().duration(150).ease('linear')
+    Svg.players().transition().duration(150).ease('linear')
       .attr('cx', function(player) { return Board.node(Game.player(player.id).current_node_id).x * width; } )
       .attr('cy', function(player) { return Board.node(Game.player(player.id).current_node_id).y * height; } );
 
     // Clear all turn classes
-    svgPlayers().filter('.turn').each(function(node) {
-      Helpers.removeClass(d3.select(this), 'turn');
+    Svg.players().filter('.turn').each(function(node) {
+      d3.select(this).classed('turn', false);
     });
 
     if (Game.activePlayer) {
-      svgPlayers().each(function(player) {
+      Svg.players().each(function(player) {
         if (player.id === Game.activePlayer.id) {
-          Helpers.addClass(d3.select(this), 'turn');
+          d3.select(this).classed('turn', true);
         }
       });
     }
-  };
-
-  var renderPlayersPanel = function() {
-    Loaders.loadPlayersPanel('players', Game.id);
-  };
-
-  var svg = function() {
-    return d3.select('#' + Board.id);
-  };
-
-  var svgRoutes = function() {
-    return svg().selectAll('line.route');
-  };
-
-  var svgNodes = function() {
-    return svg().selectAll('circle.node');
-  };
-
-  var svgPlayers = function() {
-    return svg().selectAll('circle.player');
-  };
-
-  var svgNodeLabels = function() {
-    return svg().selectAll('text.node');
   };
 };
 

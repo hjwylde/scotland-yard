@@ -11,9 +11,19 @@
 
   var onNodeClick = function() {
     $('circle.node').click(function() {
+      if (User.player().id !== Game.activePlayer.id) {
+        Toast.error("It's not your turn");
+        return;
+      }
+
       var fromNodeId = User.player().current_node_id;
       var toNodeId = $(this).attr('data-id');
       var routes = Board.findRoutes(fromNodeId, toNodeId);
+
+      if (routes.length == 0) {
+        Toast.error("There's no route to that node");
+        return;
+      }
 
       routes = routes.filter(function(route) {
         return User.player().ticket_counts[route.transport_mode] > 0;
@@ -22,6 +32,7 @@
       var ticket = null;
       switch (routes.length) {
         case 0:
+          Toast.error("You don't have enough tickets to move there");
           return;
         case 1:
           ticket = routes[0].transport_mode;
@@ -55,9 +66,12 @@
         });
       });
       promise.fail(function(error) {
-        // TODO: promise.fail
         console.error('error saving move');
         console.error(error);
+
+        errors = JSON.parse(error.responseText).errors;
+
+        Toast.error(errors.join('\n'));
       });
     });
   };
@@ -72,25 +86,17 @@
       var id = $(this).attr('data-id');
 
       // Highlight both hovered and adjacent nodes
-      svgNodes().each(function(node) {
-        if (node.id === id || $.inArray(node.id, Board.node(id).linked_node_ids) >= 0) {
-          Helpers.addClass(d3.select(this), 'highlighted');
+      Svg.nodes().each(function(node) {
+        if (node.id === id || $.inArray(node.id, Board.node(id).adjacent_node_ids) >= 0) {
+          d3.select(this).classed('highlighted', true);
         }
       });
     }, function() {
       // Remove the highlight
       $('.highlighted').each(function() {
-        Helpers.removeClass($(this), 'highlighted');
+        d3.select(this).classed('highlighted', false);
       });
     });
-  };
-
-  var svg = function() {
-    return d3.select('#' + Board.id);
-  };
-
-  var svgNodes = function() {
-    return svg().selectAll('circle.node');
   };
 })(UiEvents.hook);
 

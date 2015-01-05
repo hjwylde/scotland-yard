@@ -345,10 +345,6 @@
   new_session_path: function(options) {
   return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"session",false]],[7,"/",false]],[6,"new",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
-// new_user => /user/new(.:format)
-  new_user_path: function(options) {
-  return Utils.build_path([], ["format"], [2,[2,[2,[2,[7,"/",false],[6,"user",false]],[7,"/",false]],[6,"new",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
-  },
 // nodes => /nodes(.:format)
   nodes_path: function(options) {
   return Utils.build_path([], ["format"], [2,[2,[7,"/",false],[6,"nodes",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);

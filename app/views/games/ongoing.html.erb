@@ -1,6 +1,19 @@
-<main data-template="ongoing" data-game-id="<%= @game.id %>">
-  <%= render 'players' %>
+<%= content_for :'template-name', 'ongoing' %>
 
-  <%= render 'board' %>
-</main>
+<core-header-panel fit horizontal layout>
+  <core-toolbar horizontal layout center>
+    <paper-icon-button icon="menu" title="Players"></paper-icon-button>
+    <p class="title"><%= @game.name %></p>
+  </core-toolbar>
+
+  <div fit horizontal layout>
+    <section id="drawer">
+      <my-players-list></my-players-list>
+    </section>
+
+    <main data-game-id="<%= @game.id %>" flex>
+      <%= render 'board' %>
+    </main>
+  </div>
+</core-header-panel>
 

@@ -1,6 +1,8 @@
+<%= content_for :'template-name', 'finished' %>
+
 <%= render 'header' %>
 
-<main data-template="finished">
+<main>
   <p>The <%= winner(game: @game) %> won!</p>
 </main>
 

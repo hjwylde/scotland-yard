@@ -1,7 +1,12 @@
 class MovesController < GamesControllerBase
-  before_action :load_player, only: :create
+  before_action :load_player, only: [:index, :create]
+  before_action :load_moves, only: :index
   before_action :validate_player, only: :create
   respond_to :json
+
+  def index
+    render json: @moves
+  end
 
   def create
     to_node = Node.find(move_params[:to_node_id])
@@ -27,6 +32,10 @@ class MovesController < GamesControllerBase
 
   def load_player
     @player = Player.find(params[:player_id])
+  end
+
+  def load_moves
+    @moves = @player.moves
   end
 
   def validate_player

@@ -12,17 +12,17 @@ class Node < ActiveRecord::Base
   validates :origin, inclusion: { in: [true, false] }
   validates :x, :y, allow_nil: true, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 1.0 }
 
-  validate :no_two_origin_nodes_linked
+  validate :no_two_origin_nodes_adjacent
 
   def routes
     incoming_routes + outgoing_routes
   end
 
-  def linked_nodes
+  def adjacent_nodes
     (incoming_routes.select(:from_node_id).distinct.map(&:from_node) + outgoing_routes.select(:to_node_id).distinct.map(&:to_node))
   end
 
-  def linked_node_ids
+  def adjacent_node_ids
     (incoming_routes.pluck(:from_node_id) + outgoing_routes.pluck(:to_node_id)).uniq
   end
 
@@ -36,9 +36,9 @@ class Node < ActiveRecord::Base
     self.origin = false if origin.nil?
   end
 
-  def no_two_origin_nodes_linked
-    if origin? && linked_nodes.any?(&:origin?)
-      errors.add :origin, 'cannot be set when a linked node is also an origin node'
+  def no_two_origin_nodes_adjacent
+    if origin? && adjacent_nodes.any?(&:origin?)
+      errors.add :origin, 'cannot be set when an adjacent node is an origin node'
     end
   end
 end

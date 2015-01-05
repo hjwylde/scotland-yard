@@ -25,13 +25,13 @@ class GameValidPolicy
 
   def check_player_count_is_valid
     if @game.players.length > Game::NUMBER_OF_PLAYERS
-      @errors << "Game needs #{Game::NUMBER_OF_PLAYERS} players to start"
+      @errors << "Game must have #{Game::NUMBER_OF_PLAYERS} or less players"
     end
   end
 
   def check_player_types_are_valid
     unless player_types_are_valid
-      @errors << 'Game needs exactly 1 criminal'
+      @errors << 'Game may only have 1 criminal'
     end
   end
 

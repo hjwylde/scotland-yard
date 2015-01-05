@@ -1,6 +1,8 @@
+<%= content_for :'template-name', 'join' %>
+
 <%= render 'header' %>
 
-<main data-template="join">
+<main>
   <h2>Players:</h2>
   <ol>
   <% @game.players.each do |player| %>

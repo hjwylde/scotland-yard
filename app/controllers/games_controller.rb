@@ -1,20 +1,34 @@
+require_relative '../queries/user_games'
+
 class GamesController < SessionsControllerBase
   before_action :load_games, only: :index
   before_action :load_game, only: [:show, :status]
-  respond_to :html
+  respond_to :html, :json
 
-  def new
-    @game = Game.new
+  def index
+    respond_to do |format|
+      format.html { render :index }
+      format.json { render json: @games }
+    end
   end
 
   def show
-    if @game.finished?
-      render :finished
-    elsif @game.initialising?
-      render_game_initialising
-    elsif @game.ongoing?
-      render_game_ongoing
+    respond_to do |format|
+      format.html {
+        if @game.finished?
+          render :finished
+        elsif @game.initialising?
+          render_game_initialising
+        elsif @game.ongoing?
+          render_game_ongoing
+        end
+      }
+      format.json { render json: @game }
     end
+  end
+
+  def new
+    @game = Game.new
   end
 
   def create
@@ -30,12 +44,7 @@ class GamesController < SessionsControllerBase
   private
 
   def load_games
-    # Exclude games that are finished or on-going games that don't include the current user
-    # TODO: Put this logic elsewhere, either a scope or query builder
-    # Games relating to user or initialising games
-    @games = Game.preload(:players, :rounds).reject do |game|
-      game.finished? || (game.ongoing? && @current_user.games.exclude?(game))
-    end
+    @games = UserGames.new(user: @current_user).call
   end
 
   def load_game
