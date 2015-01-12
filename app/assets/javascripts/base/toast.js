@@ -1,6 +1,4 @@
 window.Toast = new function() {
-  var counter = 0;
-
   this.info = function(text) {
     dismissToasts();
 
@@ -12,6 +10,10 @@ window.Toast = new function() {
 
     createToast('error', text).get(0).show();
   };
+
+  // PRIVATE
+
+  var counter = 0;
 
   var createToast = function(type, text) {
     $('body').append('<paper-toast id="toast' + counter + '" class="' + type + '" text="' + text + '"></paper-toast>');

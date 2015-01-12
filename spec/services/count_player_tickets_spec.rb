@@ -1,9 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe CountPlayerTicketsService do
-  let(:player) { instance_double('Player') }
+RSpec.describe CountPlayerTickets do
+  pending 'TODO: Check CountPlayerTickets'
 
-  let(:service) { CountPlayerTicketsService.new(player: player) }
+  let(:player) { instance_double(Player) }
+
+  let(:service) { CountPlayerTickets.new(player: player) }
 
   describe '#call' do
     context 'for a criminal' do

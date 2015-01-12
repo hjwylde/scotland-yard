@@ -1,5 +1,3 @@
-require_relative '../concepts/board'
-
 class NodesController < ApplicationController
   before_action :load_nodes, only: :index
   before_action :load_routes, only: :index

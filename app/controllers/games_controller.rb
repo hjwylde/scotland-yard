@@ -1,5 +1,3 @@
-require_relative '../queries/user_games'
-
 class GamesController < SessionsControllerBase
   before_action :load_games, only: :index
   before_action :load_game, only: [:show, :status]

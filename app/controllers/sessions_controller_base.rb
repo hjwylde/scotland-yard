@@ -9,7 +9,7 @@ class SessionsControllerBase < ApplicationController
   end
 
   def validate_current_user
-    if !User.find_by(id: session[:current_user_id])
+    if !@current_user
       session.delete(:current_user_id)
 
       # Re-direct the user to login again

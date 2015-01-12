@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Game, :type => :model do
+  pending 'TODO: Check Game'
+
   fixtures :games, :players
 
   describe '#save' do
@@ -114,7 +116,7 @@ RSpec.describe Game, :type => :model do
   describe '#finished?' do
     context 'when the policy reports finished' do
       before do
-        expect(GameFinishedPolicy).to receive(:new).and_return instance_double('GameFinishedPolicy', finished?: true)
+        expect(GameFinishedPolicy).to receive(:new).and_return instance_double(GameFinishedPolicy, finished?: true)
       end
 
       it 'returns true' do
@@ -124,7 +126,7 @@ RSpec.describe Game, :type => :model do
 
     context 'when the policy reports not finished' do
       before do
-        expect(GameFinishedPolicy).to receive(:new).and_return double('GameFinishedPolicy', finished?: false)
+        expect(GameFinishedPolicy).to receive(:new).and_return instance_double(GameFinishedPolicy, finished?: false)
       end
 
       it 'returns false' do

@@ -1,6 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
+require 'games_helper'
+require 'sessions_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'wisper/rspec/matchers'
@@ -49,4 +51,6 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
   config.include Wisper::RSpec::BroadcastMatcher
+  config.include GamesHelper
+  config.include SessionsHelper
 end

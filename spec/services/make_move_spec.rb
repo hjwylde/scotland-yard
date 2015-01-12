@@ -1,16 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe MakeMoveService do
-  let(:player) { instance_double('Player', game: instance_double('Game', current_round: double)) }
-  let(:to_node) { instance_double('Node') }
+RSpec.describe MakeMove do
+  pending 'TODO: Check MakeMove'
+
+  let(:player) { instance_double(Player, game: instance_double(Game, current_round: double)) }
+  let(:to_node) { instance_double(Node) }
   let(:ticket) { double }
 
-  let(:service) { MakeMoveService.new(player: player, to_node: to_node, ticket: ticket) }
+  let(:service) { MakeMove.new(player: player, to_node: to_node, ticket: ticket) }
 
   describe '#call' do
     context 'when the player is unable to move' do
       before do
-        expect(PlayerCanMovePolicy).to receive(:new).and_return instance_double('PlayerCanMovePolicy', able_to_move?: false)
+        expect(PlayerCanMovePolicy).to receive(:new).and_return instance_double(PlayerCanMovePolicy, able_to_move?: false)
       end
 
       it 'publishes a failure event' do

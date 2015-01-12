@@ -17,7 +17,7 @@ class PlayersController < GamesControllerBase
   end
 
   def create
-    create_player = CreatePlayerService.new(game: @game, user: @current_user)
+    create_player = CreatePlayer.new(game: @game, user: @current_user)
     create_player.on :fail do |errors|
       render json: { errors: errors }, status: :internal_server_error
       return
@@ -38,15 +38,15 @@ class PlayersController < GamesControllerBase
   end
 
   def load_ticket_counts
-    @ticket_counts = CountPlayerTicketsService.new(game: @game).call
+    @ticket_counts = CountPlayerTickets.new(game: @game).call
   end
 
   def load_token_counts
-    @token_counts = CountPlayerTokensService.new(game: @game).call
+    @token_counts = CountPlayerTokens.new(game: @game).call
   end
 
   def load_active_player
-    @active_player = GetActivePlayerService.new(game: @game).call
+    @active_player = GetActivePlayer.new(game: @game).call
   end
 
   def player_params

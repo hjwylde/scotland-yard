@@ -13,11 +13,11 @@ class MovesController < GamesControllerBase
     ticket = move_params[:ticket]
     token = move_params[:token] unless move_params[:token].nil? || move_params[:token].try!(:empty?)
 
-    ticket_counts = CountPlayerTicketsService.new(game: @game).call
-    token_counts = CountPlayerTokensService.new(game: @game).call
+    ticket_counts = CountPlayerTickets.new(game: @game).call
+    token_counts = CountPlayerTokens.new(game: @game).call
 
-    make_move = MakeMoveService.new(player: @player, to_node: to_node, ticket: ticket, token: token,
-                                    cache: { ticket_counts: ticket_counts, token_counts: token_counts })
+    make_move = MakeMove.new(player: @player, to_node: to_node, ticket: ticket, token: token,
+                             cache: { ticket_counts: ticket_counts, token_counts: token_counts })
     make_move.on :success do |move|
       render json: move, status: :created
     end

@@ -23,13 +23,13 @@ class MoveValidPolicy
   private
 
   def check_player_can_use_ticket
-    if !PlayerCanUseTicketPolicy.new(player: @player).can_use?(ticket: @ticket, count: ticket_counts[@ticket])
+    unless PlayerCanUseTicketPolicy.new(player: @player).can_use?(ticket: @ticket, count: ticket_counts[@ticket])
       @errors << "You cannot use a #{@ticket} ticket"
     end
   end
 
   def check_player_can_use_token
-    if !PlayerCanUseTokenPolicy.new(player: @player).can_use?(token: @token, count: token_counts[@token])
+    unless PlayerCanUseTokenPolicy.new(player: @player).can_use?(token: @token, count: token_counts[@token])
       @errors << "You cannot use a #{@token} token"
     end
   end
@@ -55,11 +55,11 @@ class MoveValidPolicy
   end
 
   def ticket_counts
-    @cache[:ticket_counts][@player.id] || CountPlayerTicketsService.new(game: @player.game).call[@player.id]
+    (@cache[:ticket_counts] || CountPlayerTickets.new(game: @player.game).call)[@player.id]
   end
 
   def token_counts
-    @cache[:token_counts][@player.id] || CountPlayerTokensService.new(game: @player.game).call[@player.id]
+    (@cache[:token_counts] || CountPlayerTokens.new(game: @player.game).call)[@player.id]
   end
 end
 

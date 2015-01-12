@@ -1,4 +1,4 @@
-class GetActivePlayerService
+class GetActivePlayer
   def initialize(game:)
     @game = game
   end
@@ -11,7 +11,7 @@ class GetActivePlayerService
   def call
     return unless @game.ongoing?
 
-    ticket_counts = CountPlayerTicketsService.new(game: @game).call
+    ticket_counts = CountPlayerTickets.new(game: @game).call
 
     unmoved_players.detect { |player| player_can_move?(player, ticket_counts) }
   end

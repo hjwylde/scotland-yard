@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe RoundFinishedPolicy do
-  let(:round) { instance_double('Round') }
+  pending 'TODO: Check RoundFinishedPolicy'
+
+  let(:round) { instance_double(Round) }
 
   let(:policy) { RoundFinishedPolicy.new(round: round) }
 
   describe '#finished?' do
-    let(:game) { instance_double('Game')}
+    let(:game) { instance_double(Game)}
 
     before do
       allow(round).to receive(:game).and_return game
@@ -23,7 +25,7 @@ RSpec.describe RoundFinishedPolicy do
     end
 
     context "when the game hasn't finished" do
-      let(:player) { instance_double('Player') }
+      let(:player) { instance_double(Player) }
       let(:players) { [player] }
 
       before do
@@ -35,7 +37,7 @@ RSpec.describe RoundFinishedPolicy do
       context 'when there are no players left to move' do
         before do
           expect(round).to receive(:players).and_return players
-          expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double('PlayerCanMovePolicy', can_move?: false)
+          expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double(PlayerCanMovePolicy, can_move?: false)
         end
 
         it 'returns true' do
@@ -50,7 +52,7 @@ RSpec.describe RoundFinishedPolicy do
 
         context 'who can move' do
           before do
-            expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double('PlayerCanMovePolicy', can_move?: true)
+            expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double(PlayerCanMovePolicy, can_move?: true)
           end
 
           it 'returns false' do
@@ -60,7 +62,7 @@ RSpec.describe RoundFinishedPolicy do
 
         context "who can't move" do
           before do
-            expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double('PlayerCanMovePolicy', can_move?: false)
+            expect(PlayerCanMovePolicy).to receive(:new).with(player: player).and_return instance_double(PlayerCanMovePolicy, can_move?: false)
           end
 
           it 'returns true' do

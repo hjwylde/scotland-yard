@@ -11,7 +11,7 @@ class PlayerTurnPolicy
   private
 
   def active_player
-    @active_player || GetActivePlayerService.new(game: @game).call
+    @active_player || GetActivePlayer.new(game: @game).call
   end
 end
 
