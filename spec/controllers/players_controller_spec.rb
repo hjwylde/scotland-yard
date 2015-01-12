@@ -1,140 +1,99 @@
 require 'rails_helper'
 
 RSpec.describe PlayersController, :type => :controller do
+  describe 'GET index' do
+    let(:ticket_counts) { double }
+    let(:token_counts) { double }
 
-  # This should return the minimal set of attributes required to create a valid
-  # Player. As you add validations to Player, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+    let(:body) { JSON.parse(response.body) }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+    before do
+      login
+      load_game
+      load_current_player
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # PlayersController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+      allow(CountPlayerTickets).to receive(:new).and_return double(call: ticket_counts)
+      allow(CountPlayerTokens).to receive(:new).and_return double(call: token_counts)
+    end
 
-  describe "GET index" do
-    it "assigns all players as @players" do
-      player = Player.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:players)).to eq([player])
+    it 'assigns all players as @players' do
+      xhr :get, :index, game_id: game.id
+
+      expect(assigns(:players)).to eq game.players
+    end
+
+    it 'assigns the ticket counts as @ticket_counts' do
+      xhr :get, :index, game_id: game.id
+
+      expect(assigns(:ticket_counts)).to eq ticket_counts
+    end
+
+    it 'assigns the token counts as @ticket_counts' do
+      xhr :get, :index, game_id: game.id
+
+      expect(assigns(:token_counts)).to eq token_counts
+    end
+
+    it 'uses the ticket and token counts to optimise serialization' do
+      allow(controller).to receive(:render)
+      expect(controller).to receive(:render).with(json: game.players,
+        current_player: current_player, ticket_counts: ticket_counts, token_counts: token_counts)
+
+      xhr :get, :index, game_id: game.id
+    end
+
+    it 'renders the players as json' do
+      xhr :get, :index, game_id: game.id
+
+      expect(body).to eq game.players.as_json
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested player as @player" do
-      player = Player.create! valid_attributes
-      get :show, {:id => player.to_param}, valid_session
-      expect(assigns(:player)).to eq(player)
+  describe 'GET active' do
+    let(:active_player) { instance_double(Player, id: 1) }
+
+    let(:body) { JSON.parse(response.body) }
+
+    before do
+      login
+      load_game
+      load_current_player
+
+      allow(GetActivePlayer).to receive(:new).and_return double(call: active_player)
+    end
+
+    it 'assigns the active player as @active_player' do
+      xhr :get, :active, game_id: game.id
+
+      expect(assigns(:active_player)).to eq active_player.as_json
+    end
+
+    it 'renders the active player as json' do
+      xhr :get, :active, game_id: game.id
+
+      expect(body).to eq active_player.as_json
     end
   end
 
-  describe "GET new" do
-    it "assigns a new player as @player" do
-      get :new, {}, valid_session
-      expect(assigns(:player)).to be_a_new(Player)
+  describe 'POST create' do
+    it 'safely loads the player parameters' do
+      pending
     end
-  end
 
-  describe "GET edit" do
-    it "assigns the requested player as @player" do
-      player = Player.create! valid_attributes
-      get :edit, {:id => player.to_param}, valid_session
-      expect(assigns(:player)).to eq(player)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new Player" do
-        expect {
-          post :create, {:player => valid_attributes}, valid_session
-        }.to change(Player, :count).by(1)
-      end
-
-      it "assigns a newly created player as @player" do
-        post :create, {:player => valid_attributes}, valid_session
-        expect(assigns(:player)).to be_a(Player)
-        expect(assigns(:player)).to be_persisted
-      end
-
-      it "redirects to the created player" do
-        post :create, {:player => valid_attributes}, valid_session
-        expect(response).to redirect_to(Player.last)
+    context 'when the create player service fails' do
+      it 'has an bad request status' do
+        expect(response).to have_http_status :bad_request
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved player as @player" do
-        post :create, {:player => invalid_attributes}, valid_session
-        expect(assigns(:player)).to be_a_new(Player)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:player => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested player" do
-        player = Player.create! valid_attributes
-        put :update, {:id => player.to_param, :player => new_attributes}, valid_session
-        player.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "assigns the requested player as @player" do
-        player = Player.create! valid_attributes
-        put :update, {:id => player.to_param, :player => valid_attributes}, valid_session
-        expect(assigns(:player)).to eq(player)
-      end
-
-      it "redirects to the player" do
-        player = Player.create! valid_attributes
-        put :update, {:id => player.to_param, :player => valid_attributes}, valid_session
-        expect(response).to redirect_to(player)
+    context 'when the create player service succeeds' do
+      it 'assigns the new player to @player' do
+        expect(assigns(:player)).to eq player
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the player as @player" do
-        player = Player.create! valid_attributes
-        put :update, {:id => player.to_param, :player => invalid_attributes}, valid_session
-        expect(assigns(:player)).to eq(player)
-      end
-
-      it "re-renders the 'edit' template" do
-        player = Player.create! valid_attributes
-        put :update, {:id => player.to_param, :player => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE destroy" do
-    it "destroys the requested player" do
-      player = Player.create! valid_attributes
-      expect {
-        delete :destroy, {:id => player.to_param}, valid_session
-      }.to change(Player, :count).by(-1)
-    end
-
-    it "redirects to the players list" do
-      player = Player.create! valid_attributes
-      delete :destroy, {:id => player.to_param}, valid_session
-      expect(response).to redirect_to(players_url)
+    it 'redirects to the game' do
+      expect(response).to redirect_to game
     end
   end
 end

@@ -1,16 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe RoutesController, :type => :controller do
-  let(:valid_attributes) { { from_node_id: 1, to_node_id: 2, transport_mode: :taxi } }
-
   describe 'GET index' do
-    it 'assigns all routes as @routes' do
-      get :index, {}
+    let(:routes) { [instance_double(Route)] }
 
-      expect(assigns(:routes)).to eq(Route.all)
+    let(:body) { JSON.parse(response.body) }
+
+    before do
+      allow(Route).to receive(:all).and_return routes
     end
 
-    it 'serializes them'
+    it 'assigns all routes as @routes' do
+      xhr :get, :index
+
+      expect(assigns(:routes)).to eq routes
+    end
+
+    it 'renders the routes as json' do
+      xhr :get, :index
+
+      expect(body).to eq routes.as_json
+    end
   end
 end
 

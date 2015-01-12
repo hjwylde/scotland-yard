@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Player, :type => :model do
+  pending 'TODO: Check Player'
+
   fixtures :games, :players
 
   describe '#save' do

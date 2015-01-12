@@ -1,4 +1,4 @@
-class CreatePlayerService
+class CreatePlayer
   class Error < StandardError
     attr_reader :errors
 
@@ -62,7 +62,7 @@ class CreatePlayerService
   end
 
   def start_round
-    start_round = StartRoundService.new(game: @game)
+    start_round = StartRound.new(game: @game)
     start_round.on :fail do |errors|
       raise Error.new(errors)
     end

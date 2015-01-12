@@ -7,6 +7,7 @@ window.Game = new function() {
 
   this.status = null;
 
+  // TODO: Re-name to 'isFinished'
   this.finished = function() {
     return this.status === 'finished';
   };

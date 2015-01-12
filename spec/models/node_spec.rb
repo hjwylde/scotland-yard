@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Node, :type => :model do
+  pending 'TODO: Check Node'
 
   describe '#origin?' do
     context 'by default' do

@@ -1,4 +1,4 @@
-class MakeMoveService
+class MakeMove
   class Error < StandardError
     attr_reader :errors
 
@@ -53,7 +53,7 @@ class MakeMoveService
   end
 
   def start_round
-    start_round = StartRoundService.new(game: @player.game)
+    start_round = StartRound.new(game: @player.game)
     start_round.on :fail do |errors|
       raise Error.new(errors)
     end
@@ -66,11 +66,11 @@ class MakeMoveService
   end
 
   def ticket_counts
-    @cache[:ticket_counts] || CountPlayerTicketsService.new(game: @player.game).call
+    @cache[:ticket_counts] || CountPlayerTickets.new(game: @player.game).call
   end
 
   def token_counts
-    @cache[:token_counts] || CountPlayerTokensService.new(game: @player.game).call
+    @cache[:token_counts] || CountPlayerTokens.new(game: @player.game).call
   end
 end
 

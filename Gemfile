@@ -32,6 +32,9 @@ group :development do
   gem 'rspec-rails'
   gem 'wisper-rspec'
 
+  gem 'guard'
+  gem 'guard-rspec'
+
   # Debugging
   gem 'pry-byebug'
   gem 'better_errors'

@@ -1,4 +1,4 @@
-class StartRoundService
+class StartRound
   include Wisper::Publisher
 
   def initialize(game:)

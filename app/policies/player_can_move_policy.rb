@@ -36,14 +36,12 @@ class PlayerCanMovePolicy
   def player_can_use_tickets(counts)
     policy = PlayerCanUseTicketPolicy.new(player: @player)
     Move::TICKET_TYPES.any? do |ticket|
-      if counts[ticket] > 0
-        policy.can_use?(ticket: ticket, count: counts[ticket])
-      end
+      policy.can_use?(ticket: ticket, count: counts[ticket]) if counts[ticket] > 0
     end
   end
 
   def ticket_counts
-    @cache[:ticket_counts][@player.id] || CountPlayerTicketsService.new(game: @player.game).call[@player.id]
+    (@cache[:ticket_counts] || CountPlayerTickets.new(game: @player.game).call)[@player.id]
   end
 end
 

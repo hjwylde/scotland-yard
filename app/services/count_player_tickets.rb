@@ -1,4 +1,4 @@
-class CountPlayerTicketsService
+class CountPlayerTickets
   def initialize(game:)
     @game = game
   end

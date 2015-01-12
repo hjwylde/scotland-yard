@@ -18,7 +18,7 @@ class RoundFinishedPolicy
   end
 
   def movable_players
-    ticket_counts = CountPlayerTicketsService.new(game: @round.game).call
+    ticket_counts = CountPlayerTickets.new(game: @round.game).call
 
     @round.game.players.select do |player|
       PlayerCanMovePolicy.new(player: player, cache: { ticket_counts: ticket_counts }).can_move?

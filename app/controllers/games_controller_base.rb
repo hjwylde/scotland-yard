@@ -6,7 +6,7 @@ class GamesControllerBase < SessionsControllerBase
   private
 
   def load_game
-    @game = Game.preload(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id])
+    @game = Game.preload(players: [moves: :to_node], rounds: [moves: :to_node]).find(params[:game_id].to_i)
   end
 
   def load_current_player

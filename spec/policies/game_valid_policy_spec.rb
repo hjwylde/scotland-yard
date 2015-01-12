@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GameValidPolicy do
-  let(:game) { instance_double('Game') }
+  let(:game) { instance_double(Game) }
 
   let(:policy) { GameValidPolicy.new(game: game) }
 
@@ -16,6 +16,14 @@ RSpec.describe GameValidPolicy do
     context "when the game has more than #{Game::NUMBER_OF_PLAYERS} players" do
       let(:players) { double(length: Game::NUMBER_OF_PLAYERS + 1) }
 
+      before do
+        allow(players).to receive(:one?).and_return true
+      end
+
+      it 'publishes a fail event' do
+        expect { policy.valid? }.to broadcast(:fail)
+      end
+
       it 'returns false' do
         expect(policy.valid?).to be_falsey
       end
@@ -24,19 +32,13 @@ RSpec.describe GameValidPolicy do
     context "when the game has less than #{Game::NUMBER_OF_PLAYERS} players" do
       let(:players) { double(length: Game::NUMBER_OF_PLAYERS - 1) }
 
-      context 'and there are 0 criminals' do
+      context 'and there are less than 2 criminals' do
         before do
-          expect(players).to receive(:count).and_return 0
+          expect(players).to receive(:many?).and_return false
         end
 
-        it 'returns true' do
-          expect(policy.valid?).to be_truthy
-        end
-      end
-
-      context 'and there is 1 criminal' do
-        before do
-          expect(players).to receive(:count).and_return 1
+        it "doesn't publish a fail event" do
+          expect { policy.valid? }.to_not broadcast(:fail)
         end
 
         it 'returns true' do
@@ -46,7 +48,11 @@ RSpec.describe GameValidPolicy do
 
       context 'and there is more than 1 criminal' do
         before do
-          expect(players).to receive(:count).and_return 2
+          expect(players).to receive(:many?).and_return true
+        end
+
+        it 'publishes a fail event' do
+          expect { policy.valid? }.to broadcast(:fail)
         end
 
         it 'returns false' do
@@ -63,6 +69,10 @@ RSpec.describe GameValidPolicy do
           expect(players).to receive(:one?).and_return true
         end
 
+        it "doesn't publish a fail event" do
+          expect { policy.valid? }.to_not broadcast(:fail)
+        end
+
         it 'returns true' do
           expect(policy.valid?).to be_truthy
         end
@@ -71,6 +81,10 @@ RSpec.describe GameValidPolicy do
       context 'and there are either 0 or more than 1 criminals' do
         before do
           expect(players).to receive(:one?).and_return false
+        end
+
+        it 'publishes a fail event' do
+          expect { policy.valid? }.to broadcast(:fail)
         end
 
         it 'returns false' do

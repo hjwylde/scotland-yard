@@ -22,7 +22,7 @@ window.Board = new function() {
     }.bind(this));
 
     return promise;
-  }
+  };
 
   this.loaded = function() {
     return this.nodes.length && this.routes.length;
