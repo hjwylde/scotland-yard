@@ -14,7 +14,7 @@ class GamesControllerBase < SessionsControllerBase
   end
 
   def validate_game
-    head :unauthorized unless @current_player
+    head :forbidden unless @current_player
   end
 end
 

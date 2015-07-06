@@ -1,6 +1,6 @@
 class GamesController < SessionsControllerBase
   before_action :load_games, only: :index
-  before_action :load_game, only: [:show, :status]
+  before_action :load_game, only: :show
   respond_to :html, :json
 
   def index
@@ -54,6 +54,7 @@ class GamesController < SessionsControllerBase
   end
 
   def render_game_initialising
+    # TODO: Swap this round so it uses the game to check if it contains the current user
     if @current_user.games.include?(@game)
       render :waiting
     else
@@ -64,10 +65,11 @@ class GamesController < SessionsControllerBase
   end
 
   def render_game_ongoing
+    # TODO: Swap this round so it uses the game to check if it contains the current user
     if @current_user.games.include?(@game)
       render :ongoing
     else
-      head :unauthorized
+      head :forbidden
     end
   end
 end

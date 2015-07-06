@@ -1,4 +1,8 @@
+
+# Number of workers
 worker_processes 16
+
+# Nuke workers after 30 seconds
 timeout 30
 preload_app true
 

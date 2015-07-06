@@ -1,0 +1,6 @@
+TODO: Use Set instead of Array.uniq
+TODO: Re-name __all.js to all.js in User/views
+TODO: Move all the console.warning / console.error from * to */loaders.js
+TODO: Make constant for Javascript 'Crminal' and 'Detective' types
+TODO: Make Player models
+TODO: Don't stub redirect / render

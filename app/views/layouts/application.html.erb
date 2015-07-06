@@ -8,7 +8,7 @@
   <%= csrf_meta_tags %>
   <%= google_webfonts_init(google: ['Roboto Slab', 'Roboto']) %>
 </head>
-<body data-template="<%= yield :'template-name' %>" fullbleed layout vertical unresolved>
+<body data-template="<%= yield :'template-name' %>" data-controller="<%= yield :'controller-name' %>" fullbleed layout vertical unresolved>
 
   <%= yield %>
 

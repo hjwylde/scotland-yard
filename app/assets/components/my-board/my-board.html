@@ -1,0 +1,14 @@
+<polymer-element name="my-board">
+  <template>
+    <link rel="stylesheet" href="my-board.css" />
+
+    <svg viewBox="0 0 {{width}} {{height}}" preserveAspectRatio="xMidYMid meet">
+      <template repeat="{{nodes}}">
+        <circle r="15" class="node {{transport_modes}}" cx="{{getX()}}" cy="{{getY()}}" data-id="{{id}}"></circle>
+      </template>
+    </svg>
+  </template>
+
+  <script src="my-board.js"></script>
+</polymer-element>
+

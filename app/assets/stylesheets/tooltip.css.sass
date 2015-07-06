@@ -1,0 +1,45 @@
+[data-tooltip]
+  position: relative
+  display: inline-block
+
+  &::after
+    content: attr(data-tooltip)
+    white-space: nowrap
+
+    padding: 0 7px
+    bottom: 10000px
+    margin-left: -18px
+
+    background: #383838
+    text-shadow: 0 -1px 0 black
+
+    font-size: 12px
+    color: #e0e0e0
+    line-height: 24px
+    height: 24px
+    min-width: 33px
+    text-align: center
+
+  &::before
+    content: ''
+
+    border: 6px solid transparent
+    border-bottom-color: #383838
+    margin-top: -12px
+
+    background: transparent
+
+  &::before, &::after
+    position: absolute
+    z-index: 1000
+    top: 100%
+    left: 50%
+
+    visibility: hidden
+    opacity: 0
+    pointer-events: none
+
+  &:hover::before, &:hover::after
+    visibility: visible
+    opacity: 1
+

@@ -1,13 +1,12 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'new' %>
 
-<core-header-panel flex>
-  <core-toolbar horizontal layout center>
-    <paper-icon-button icon="arrow-back" title="Back"></paper-icon-button>
-    <p class="title"><%= Game::NAME %></p>
-  </core-toolbar>
+<%= render layout: 'shared/wrapper',
+  locals: { title: Game::NAME, icon: 'arrow-back', icon_href: games_path } do %>
 
-  <main flex horizontal layout center-justified center>
-    <%= render 'form' %>
-  </main>
-</core-header-panel>
+  <div vertical layout center-justified center>
+    <%= render 'new_form' %>
+  </div>
+
+<% end -%>
 

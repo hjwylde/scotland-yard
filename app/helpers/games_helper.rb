@@ -3,7 +3,7 @@ module GamesHelper
     pluralize(Game::NUMBER_OF_PLAYERS - game.players.length, 'spot')
   end
 
-  def winner(game:)
+  def winner_of(game)
     if DetectivesWonPolicy.new(game: game).won?
       'detectives'
     else

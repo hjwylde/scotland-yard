@@ -17,7 +17,7 @@
       }
 
       var fromNodeId = User.player().current_node_id;
-      var toNodeId = $(this).attr('data-id');
+      var toNodeId = $(this).data('id');
       var routes = Board.findRoutes(fromNodeId, toNodeId);
 
       if (routes.length == 0) {
@@ -83,7 +83,7 @@
   var onNodeHover = function() {
     // Highlight the node and adjacent nodes node on the board when the user hovers the mouse
     $('circle.node').hover(function() {
-      var id = $(this).attr('data-id');
+      var id = $(this).data('id');
 
       // Highlight both hovered and adjacent nodes
       Svg.nodes().each(function(node) {

@@ -1,8 +1,12 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'finished' %>
 
-<%= render 'header' %>
+<%= render layout: 'shared/wrapper',
+  locals: { title: @game.name, icon: 'arrow-back', icon_href: games_path } do %>
 
-<main>
-  <p>The <%= winner(game: @game) %> won!</p>
-</main>
+  <div vertical layout center-justified center>
+    <p>The <%= winner_of @game -%> won!</p>
+  </div>
+
+<% end -%>
 

@@ -1,0 +1,7 @@
+<%= form_for [@game, @player.becomes(Player)] do |f| %>
+  <% f.object = @player.becomes(@player.class) %>
+  <%= f.label :type, 'Type: ' %>
+  <%= f.select :type, [Detective.name, Criminal.name] %>
+  <%= f.submit 'Join' %>
+<% end -%>
+

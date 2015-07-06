@@ -1,6 +1,9 @@
 window.Board = new function() {
   this.id = 'board';
 
+  this.width = 1389;
+  this.height = 1130;
+
   this.nodes = [];
   this.routes = [];
 

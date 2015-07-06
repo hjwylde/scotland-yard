@@ -1,8 +1,11 @@
-<header>
-  <h1>Login</h1>
-</header>
+<%= content_for :'controller-name', 'session' %>
+<%= content_for :'template-name', 'new' %>
 
-<main>
-  <%= render 'form' %>
-</main>
+<%= render layout: 'shared/wrapper', locals: { title: 'Login' } do %>
+
+  <div flex horizontal layout center-justified center>
+    <%= render 'form' %>
+  </div>
+
+<% end -%>
 

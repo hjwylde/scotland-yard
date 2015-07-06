@@ -13,7 +13,7 @@ gem 'actionpack-page_caching'
 # Database
 gem 'sqlite3'
 
-# HTML / CSS
+# HTML, CSS
 gem 'google-webfonts-rails'
 gem 'normalize-rails'
 gem 'polymer-rails'

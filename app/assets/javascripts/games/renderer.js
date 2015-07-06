@@ -21,12 +21,9 @@ window.Renderer = new function() {
 
   // PRIVATE
 
-  var width = 1389;
-  var height = 1130;
-
   var createSvg = function() {
     Svg.root()
-      .attr('viewBox', '0 0 ' + width + ' ' + height)
+      .attr('viewBox', '0 0 ' + Board.width + ' ' + Board.height)
       .attr('preserveAspectRatio', 'xMidYMid meet');
   };
 
@@ -35,10 +32,10 @@ window.Renderer = new function() {
       .data(Board.routes)
       .enter().append('line')
       .attr('class', function(route) { return 'route ' + route.transport_mode; })
-      .attr('x1', function(route) { return Board.node(route.from_node_id).x * width; })
-      .attr('y1', function(route) { return Board.node(route.from_node_id).y * height; })
-      .attr('x2', function(route) { return Board.node(route.to_node_id).x * width; })
-      .attr('y2', function(route) { return Board.node(route.to_node_id).y * height; });
+      .attr('x1', function(route) { return Board.node(route.from_node_id).getX(); })
+      .attr('y1', function(route) { return Board.node(route.from_node_id).getY(); })
+      .attr('x2', function(route) { return Board.node(route.to_node_id).getX(); })
+      .attr('y2', function(route) { return Board.node(route.to_node_id).getY(); });
   };
 
   var createNodes = function() {
@@ -47,8 +44,8 @@ window.Renderer = new function() {
       .enter().append('circle')
       .attr('class', function(node) { return 'node ' + node.transport_modes.join(' '); })
       .attr('r', 15)
-      .attr('cx', function(node) { return node.x * width; })
-      .attr('cy', function(node) { return node.y * height; })
+      .attr('cx', function(node) { return node.getX(); })
+      .attr('cy', function(node) { return node.getY(); })
       .attr('data-id', function(node) { return node.id; });
   };
 
@@ -63,8 +60,8 @@ window.Renderer = new function() {
           (player.id === User.player().id ? ' me' : '');
       })
       .attr('r', 15)
-      .attr('cx', function(player) { return Board.node(Game.player(player.id).current_node_id).x * width; } )
-      .attr('cy', function(player) { return Board.node(Game.player(player.id).current_node_id).y * height; } )
+      .attr('cx', function(player) { return Board.node(Game.player(player.id).current_node_id).getX(); } )
+      .attr('cy', function(player) { return Board.node(Game.player(player.id).current_node_id).getY(); } )
       .attr('data-id', function(player) { return player.id; });
   };
 
@@ -76,15 +73,15 @@ window.Renderer = new function() {
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'central')
       .text(function(node) { return node.id; } )
-      .attr('x', function(node) { return node.x * width; })
-      .attr('y', function(node) { return node.y * height; });
+      .attr('x', function(node) { return node.getX(); })
+      .attr('y', function(node) { return node.getY(); });
   };
 
   var renderPlayers = function() {
     // Move the players
     Svg.players().transition().duration(150).ease('linear')
-      .attr('cx', function(player) { return Board.node(Game.player(player.id).current_node_id).x * width; } )
-      .attr('cy', function(player) { return Board.node(Game.player(player.id).current_node_id).y * height; } );
+      .attr('cx', function(player) { return Board.node(Game.player(player.id).current_node_id).getX(); } )
+      .attr('cy', function(player) { return Board.node(Game.player(player.id).current_node_id).getY(); } );
 
     // Clear all turn classes
     Svg.players().filter('.turn').each(function(node) {

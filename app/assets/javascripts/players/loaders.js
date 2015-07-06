@@ -3,6 +3,7 @@ window.Loaders = (function(module) {
     var request = $.get(Routes.game_players_path(gameId), null, null, 'json');
 
     request.then(function(players) {
+      // TODO: Enhance to a forEach loop?
       for (var i = 0; i < players.length; i++) {
         var player = players[i];
 

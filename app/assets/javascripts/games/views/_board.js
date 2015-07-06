@@ -12,6 +12,10 @@
   };
 
   var loadUser = function(timeout) {
+    if (User.loaded()) {
+      return;
+    }
+
     var promise = User.load();
     promise.done(function(user) {
       Renderer.render();
@@ -46,7 +50,7 @@
   };
 
   var loadGame = function(timeout) {
-    var gameId = $('main').attr('data-game-id');
+    var gameId = $('template#game').data('game-id');
     var promise = Game.load(gameId);
     promise.done(function() {
       Renderer.render();

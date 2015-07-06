@@ -39,8 +39,8 @@ class MovesController < GamesControllerBase
   end
 
   def validate_player
-    head :unauthorized if @player.game != @game
-    head :unauthorized if @player.user != @current_user
+    head :forbidden if @player.game != @game
+    head :forbidden if @player.user != @current_user
   end
 
   def move_params

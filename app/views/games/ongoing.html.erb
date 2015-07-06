@@ -1,19 +1,15 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'ongoing' %>
 
-<core-header-panel fit horizontal layout>
-  <core-toolbar horizontal layout center>
-    <paper-icon-button icon="menu" title="Players"></paper-icon-button>
-    <p class="title"><%= @game.name %></p>
-  </core-toolbar>
+<template id="game" data-game-id="<%= @game.id -%>"></template>
 
-  <div fit horizontal layout>
-    <section id="drawer">
-      <my-players-list></my-players-list>
-    </section>
+<%= render layout: 'shared/wrapper',
+  locals: { title: @game.name, icon: 'arrow-back', icon_href: games_path } do %>
 
-    <main data-game-id="<%= @game.id %>" flex>
-      <%= render 'board' %>
-    </main>
-  </div>
-</core-header-panel>
+  <my-players-list relative></my-players-list>
+
+  <%= render 'board' %>
+  <!--<my-board></my-board>-->
+
+<% end -%>
 

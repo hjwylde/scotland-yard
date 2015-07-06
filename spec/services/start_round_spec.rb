@@ -6,7 +6,7 @@ RSpec.describe StartRound do
   let(:service) { StartRound.new(game: game) }
 
   describe '#call' do
-    let(:current_round) { instance_double(Round, number: Round::STARTING_ROUND_NUMBER) }
+    let(:current_round) { double(Round, number: Round::STARTING_ROUND_NUMBER) }
 
     let(:round) { instance_double(Round, save: true) }
     let(:rounds) { double(new: round) }

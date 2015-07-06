@@ -1,15 +1,17 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'waiting' %>
 
-<%= render 'header' %>
+<%= render layout: 'shared/wrapper',
+  locals: { title: @game.name, icon: 'arrow-back', icon_href: games_path } do %>
 
-<main>
-  <h2>Players:</h2>
-  <ol>
-  <% @game.players.each do |player| %>
-    <li><%= "#{player.type} #{player.name}" %></li>
-  <% end %>
-  </ol>
+  <div vertical layout center>
+    <h2>Players:</h2>
+    <ol>
+    <% @game.players.each do |player| %>
+      <li><%= "#{player.type} #{player.name}" %></li>
+    <% end %>
+    </ol>
+  </div>
 
-  <%= link_to 'Back', games_path %>
-</main>
+<% end -%>
 

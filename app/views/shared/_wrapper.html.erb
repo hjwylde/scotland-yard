@@ -1,0 +1,19 @@
+<% # Supports the title, icon and icon_href attributes (local variables) -%>
+
+<% title ||= Game::NAME -%>
+<% icon ||= nil -%>
+<% icon_href ||= '#' -%>
+
+<core-header-panel fit horizontal layout>
+  <core-toolbar vertical layout>
+    <!-- TODO: Make this a component -->
+    <paper-icon-button icon="<%= icon || 'menu' -%>" data-href="<%= icon_href -%>" <%= 'disabled' unless icon -%>></paper-icon-button>
+    <p class="title" flex><%= title -%></p>
+    <% if @current_user -%><my-logout-icon-button data-tooltip="Logout"></my-logout-icon-button><% end -%>
+  </core-toolbar>
+
+  <main fit>
+    <%= yield %>
+  </main>
+</core-header-panel>
+

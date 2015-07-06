@@ -1,22 +1,19 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'join' %>
 
-<%= render 'header' %>
+<%= render layout: 'shared/wrapper',
+  locals: { title: @game.name, icon: 'arrow-back', icon_href: games_path } do %>
 
-<main>
-  <h2>Players:</h2>
-  <ol>
-  <% @game.players.each do |player| %>
-    <li><%= "#{player.type} #{player.name}" %></li>
-  <% end %>
-  </ol>
+  <div vertical layout center>
+    <h2>Players:</h2>
+    <ol>
+    <% @game.players.each do |player| %>
+      <li><%= "#{player.type} #{player.name}" %></li>
+    <% end %>
+    </ol>
 
-  <%= form_for [@game, @player.becomes(Player)] do |f| %>
-    <% f.object = @player.becomes(@player.class) %>
-    <%= f.label :type, 'Type: ' %>
-    <%= f.select :type, [Detective.name, Criminal.name] %>
-    <%= f.submit 'Join' %>
-  <% end %>
+    <%= render 'join_form' %>
+  </div>
 
-  <%= link_to 'Back', games_path %>
-</main>
+<% end -%>
 

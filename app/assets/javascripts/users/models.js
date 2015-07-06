@@ -41,5 +41,16 @@ window.User = new function() {
   this.loaded = function() {
     return this.id >= 0;
   };
+
+  this.logout = function() {
+    if (this.id < 0) {
+      return;
+    }
+
+    var promise = $.ajax(Routes.session_path(), { type: 'DELETE' });
+    promise.always(function() {
+      window.location.href = Routes.new_session_path();
+    });
+  };
 };
 

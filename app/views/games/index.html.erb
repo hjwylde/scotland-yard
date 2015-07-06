@@ -1,19 +1,13 @@
+<%= content_for :'controller-name', 'games' %>
 <%= content_for :'template-name', 'index' %>
 
-<core-header-panel flex>
-  <core-toolbar horizontal layout center>
-    <paper-icon-button icon="radio-button-off" disabled></paper-icon-button>
-    <p class="title"><%= Game::NAME %></p>
-  </core-toolbar>
+<%= render layout: 'shared/wrapper' do %>
 
-  <main flex horizontal layout center-justified>
-    <section id="games">
-      <my-games-list header="On-going games" status="ongoing" flex></my-games-list>
+  <div vertical layout center>
+    <%= render 'games' %>
+  </div>
 
-      <my-games-list header="Friends' games" status="initialising" flex></my-games-list>
-    </section>
+  <my-new-game-fab id="new-game"></my-new-game-fab>
 
-    <my-new-game-fab id="new-game"></my-new-game-fab>
-  </main>
-</core-header-panel>
+<% end -%>
 
